@@ -13,4 +13,7 @@ export class Users {
 
   @Column({ type: "boolean" })
   is_admin: boolean;
+
+  @Column({ type: "boolean" })
+  is_active: boolean;
 }
