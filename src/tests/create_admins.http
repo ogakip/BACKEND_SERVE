@@ -1,8 +1,0 @@
-### Registro
-POST http://localhost:3333/user/register
-Content-Type: application/json
-
-{
-    "password": "admin",
-    "username": "admin"
-}

@@ -1,0 +1,10 @@
+### Registro
+PATCH http://localhost:3333/user/change
+Content-Type: application/json
+Authorization: token eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyX2lkIjoxMywiaWF0IjoxNzUyODcwMDExLCJleHAiOjE3NTM0NzQ4MTF9.Q4goau592Zn00ZRt-Dy5QoKIS--JJIymuGACwAKLiIY
+
+{
+    "id": 14,
+    "is_active": true,
+    "is_admin": true
+}

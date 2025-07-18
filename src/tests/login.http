@@ -3,24 +3,6 @@ POST http://localhost:3333/user/login
 Content-Type: application/json
 
 {
-    "pass": "Somave@2020",
-    "username": "p.henrique"
-}
-
-### Login
-POST http://localhost:3333/user/login
-Content-Type: application/json
-
-{
-    "pass": "Somave@2020",
-    "username": "pe.henrique"
-}
-
-### Login
-POST http://localhost:3333/user/login
-Content-Type: application/json
-
-{
-    "pass": "Somave@2020",
-    "username": "j.marcos"
+    "password": "admin",
+    "username": "admin"
 }
