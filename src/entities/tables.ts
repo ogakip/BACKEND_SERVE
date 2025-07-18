@@ -5,9 +5,9 @@ export class Table {
   @PrimaryGeneratedColumn()
   id: number;
 
-  @Column({ type: "varchar" })
+  @Column({ type: "varchar", nullable: true })
   client: string;
 
-  @Column({ type: "boolean", default: false })
-  status: boolean;
+  @Column({ type: "varchar", default: "empty", nullable: true })
+  status: string;
 }
