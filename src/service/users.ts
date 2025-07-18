@@ -10,16 +10,28 @@ export const RegUserService = async ({ username, password }: RegUserProps) => {
 
     const userExists = await userRepo.findOneBy({ username });
 
+    console.log('teste')
+
     if (userExists) {
         throw new AppError("Usuário já cadastrado.");
     }
 
+    console.log('teste2')
+
+
     const hashedPassword = await hash(password, 10);
+
+    console.log('senha')
+
 
     await userRepo.save({
         username,
-        pass: hashedPassword
+        password: hashedPassword,
+        is_active: true,
+        is_admin: false
     });
+
+    console.log('teste3')
 
     return { message: "Usuário cadastrado com sucesso." };
 }

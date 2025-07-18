@@ -1,18 +1,21 @@
-import express from 'express';
-import { AppDataSource } from './database/datasource';
+import "reflect-metadata";
+import { app } from "./app";
+import { AppDataSource } from "./database/datasource";
 
-const app = express();
-const PORT = 8080;
+export const init = async () => {
+  const PORT = process.env.PORT ? process.env.PORT : 3333;
 
-app.use(express.json());
-
-AppDataSource.initialize()
-  .then(() => {
-    console.log('📦 Banco conectado!');
-    app.listen(PORT, () => {
-      console.log(`🚀 Servidor rodando em http://localhost:${PORT}`);
+  await AppDataSource
+    .initialize()
+    .then(() => {
+      console.log(`CONNECTION STABLISHED WITH DATABASE`);
+    })
+    .catch((error: any) => {
+      console.log(error);
     });
-  })
-  .catch((error) => {
-    console.error('❌ Erro ao conectar no banco:', error);
+
+  app.listen(PORT, () => {
+    console.log(`Application running on port: ${PORT}`);
   });
+};
+init();
