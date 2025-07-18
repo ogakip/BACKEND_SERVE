@@ -9,6 +9,6 @@ export class StockIngredient {
   @ManyToOne(() => Item)
   item: Item;
 
-  @Column("decimal", { precision: 10, scale: 2 })
+  @Column({ type: "decimal", precision: 10, scale: 2 })
   quantity: number;
 }

@@ -1,5 +1,11 @@
-import { Entity, PrimaryGeneratedColumn, ManyToOne, Column, CreateDateColumn, UpdateDateColumn } from "typeorm";
-import { User } from "./users";
+import {
+  Entity,
+  PrimaryGeneratedColumn,
+  ManyToOne,
+  Column,
+  CreateDateColumn
+} from "typeorm";
+import { Users } from "./users";
 import { Table } from "./tables";
 import { Recipe } from "./recipes";
 
@@ -8,8 +14,8 @@ export class Order {
   @PrimaryGeneratedColumn()
   id: number;
 
-  @ManyToOne(() => User)
-  user: User;
+  @ManyToOne(() => Users)
+  user: Users;
 
   @ManyToOne(() => Table)
   table: Table;
@@ -17,12 +23,12 @@ export class Order {
   @ManyToOne(() => Recipe)
   recipe: Recipe;
 
-  @Column()
+  @Column({ type: "varchar" })
   status: string;
 
-  @CreateDateColumn()
+  @CreateDateColumn({ type: "timestamp" })
   created_at: Date;
 
-  @Column({ nullable: true })
-  finished_at: Date;
+  @Column({ type: "timestamp", nullable: true })
+  finished_at: Date | null;
 }

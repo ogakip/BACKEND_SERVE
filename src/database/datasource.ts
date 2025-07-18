@@ -1,6 +1,6 @@
 import 'reflect-metadata';
 import { DataSource } from 'typeorm';
-import { User } from '../entities/users';
+import { Users } from '../entities/users';
 import { Table } from '../entities/tables';
 import { Item } from '../entities/items';
 import { StockIngredient } from '../entities/stockIngredients';
@@ -17,7 +17,7 @@ export const AppDataSource = new DataSource({
   database: 'serve_db_test',
   synchronize: true, // ⛔ troque pra false em produção!
   logging: false,
-  entities: [User, Table, Item, StockIngredient, Recipe, RecipeIngredient, Order],
+  entities: [Users, Table, Item, StockIngredient, Recipe, RecipeIngredient, Order],
   migrations: [],
   subscribers: [],
 });

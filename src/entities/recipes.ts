@@ -6,17 +6,17 @@ export class Recipe {
   @PrimaryGeneratedColumn()
   id: number;
 
-  @Column()
+  @Column({ type: "varchar" })
   title: string;
 
-  @Column({ nullable: true })
-  description: string;
+  @Column({ type: "varchar", nullable: true })
+  description: string | null;
 
-  @Column("decimal", { precision: 10, scale: 2 })
+  @Column({ type: "decimal", precision: 10, scale: 2 })
   value: number;
 
-  @Column("decimal", { precision: 10, scale: 2, nullable: true })
-  offer: number;
+  @Column({ type: "decimal", precision: 10, scale: 2, nullable: true })
+  offer: number | null;
 
   @OneToMany(() => RecipeIngredient, ri => ri.recipe, { cascade: true })
   ingredients: RecipeIngredient[];

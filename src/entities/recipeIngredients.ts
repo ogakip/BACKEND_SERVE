@@ -7,12 +7,14 @@ export class RecipeIngredient {
   @PrimaryGeneratedColumn()
   id: number;
 
-  @ManyToOne(() => Recipe, recipe => recipe.ingredients, { onDelete: "CASCADE" })
+  @ManyToOne(() => Recipe, recipe => recipe.ingredients, {
+    onDelete: "CASCADE"
+  })
   recipe: Recipe;
 
   @ManyToOne(() => Item)
   item: Item;
 
-  @Column("decimal", { precision: 10, scale: 2 })
+  @Column({ type: "decimal", precision: 10, scale: 2 })
   quantity: number;
 }

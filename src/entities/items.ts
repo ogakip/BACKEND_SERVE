@@ -5,15 +5,15 @@ export class Item {
   @PrimaryGeneratedColumn()
   id: number;
 
-  @Column()
+  @Column({ type: "varchar" })
   title: string;
 
-  @Column({ nullable: true })
-  description: string;
+  @Column({ type: "varchar", nullable: true })
+  description: string | null;
 
-  @Column()
+  @Column({ type: "varchar" })
   unit_type: string;
 
-  @Column("decimal", { precision: 10, scale: 2 })
+  @Column({ type: "decimal", precision: 10, scale: 2 })
   unit_value: number;
 }
