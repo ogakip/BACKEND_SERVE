@@ -1,21 +1,22 @@
 import { Column, Entity, ManyToOne, PrimaryGeneratedColumn } from "typeorm";
 import { Restaurant } from "./restaurants";
 
-enum TableStatus {
-    EMPTY = "empty",
-    BUSY = "busy"
-}
-
 @Entity()
-export class Table {
+export class Ingredients {
     @PrimaryGeneratedColumn()
     id: number;
 
-    @Column({ type: "varchar", nullable: true })
-    client: string;
+    @Column({ type: "varchar" })
+    title: string;
 
-    @Column({ type: "enum", enum: TableStatus })
-    status: TableStatus;
+    @Column({ type: "varchar", nullable: true })
+    description: string | null;
+
+    @Column({ type: "varchar" })
+    unit_type: string;
+
+    @Column({ type: "decimal", precision: 10, scale: 2 })
+    unit_value: number;
 
     @ManyToOne(() => Restaurant, { nullable: false })
     owner: Restaurant;
