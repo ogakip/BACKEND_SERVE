@@ -84,3 +84,11 @@ export const EditPlanService = async (admin_id: number, plan_id: number, EditPla
 
     return { message: messages.SUCCESSFUL_EDIT }
 }
+
+export const DeletePlanService = async (admin_id: number, plan_id: number) => {
+    await checkIfAdminExists(admin_id)
+
+    await PlansRepository.delete(plan_id)
+
+    return
+}
