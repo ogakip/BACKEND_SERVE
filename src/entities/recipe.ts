@@ -1,4 +1,4 @@
-import { Column, Entity, ManyToOne, OneToMany, PrimaryGeneratedColumn } from "typeorm";
+import { Column, Entity, JoinColumn, ManyToOne, OneToMany, PrimaryGeneratedColumn } from "typeorm";
 import { Restaurant } from "./restaurants";
 import { RecipeIngredient } from "./recipeIngredients";
 
@@ -23,5 +23,6 @@ export class Recipe {
     ingredients: RecipeIngredient[];
 
     @ManyToOne(() => Restaurant, { nullable: false })
-    owner: Restaurant;
+    @JoinColumn({ name: 'owner_id' })
+    owner: Restaurant
 }

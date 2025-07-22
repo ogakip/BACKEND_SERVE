@@ -1,4 +1,4 @@
-import { Column, Entity, ManyToOne, PrimaryGeneratedColumn } from "typeorm";
+import { Column, Entity, JoinColumn, ManyToOne, PrimaryGeneratedColumn } from "typeorm";
 import { Restaurant } from "./restaurants";
 import { Plans } from "./plans";
 
@@ -8,9 +8,11 @@ export class Subscriptions {
     id: number;
 
     @ManyToOne(() => Restaurant, { nullable: false })
-    owner: Restaurant;
+    @JoinColumn({ name: 'owner_id' })
+    owner: Restaurant
 
     @ManyToOne(() => Plans, { nullable: false })
+    @JoinColumn({ name: 'plan_id' })
     plan: Plans;
 
     @Column({ type: 'timestamp', nullable: true })

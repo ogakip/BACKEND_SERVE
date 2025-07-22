@@ -1,4 +1,4 @@
-import { Column, CreateDateColumn, Entity, ManyToOne, PrimaryGeneratedColumn, Table } from "typeorm";
+import { Column, CreateDateColumn, Entity, JoinColumn, ManyToOne, PrimaryGeneratedColumn, Table } from "typeorm";
 import { Recipe } from "./recipe";
 import { Restaurant } from "./restaurants";
 
@@ -29,5 +29,6 @@ export class Order {
     finished_at: Date | null;
 
     @ManyToOne(() => Restaurant, { nullable: false })
-    owner: Restaurant;
+    @JoinColumn({ name: 'owner_id' })
+    owner: Restaurant
 }

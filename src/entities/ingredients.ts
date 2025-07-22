@@ -1,4 +1,4 @@
-import { Column, Entity, ManyToOne, PrimaryGeneratedColumn } from "typeorm";
+import { Column, Entity, JoinColumn, ManyToOne, PrimaryGeneratedColumn } from "typeorm";
 import { Restaurant } from "./restaurants";
 
 @Entity()
@@ -19,5 +19,6 @@ export class Ingredients {
     unit_value: number;
 
     @ManyToOne(() => Restaurant, { nullable: false })
-    owner: Restaurant;
+    @JoinColumn({ name: 'owner_id' })
+    owner: Restaurant
 }
