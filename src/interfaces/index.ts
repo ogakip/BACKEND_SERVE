@@ -20,6 +20,18 @@ export interface LOGIN_RESTAURANT_PROPS {
     password: string
 }
 
+export interface EDIT_RESTAURANT_PROPS {
+    fullname?: string
+    password?: string
+    phone?: string
+    street?: string
+    number?: string
+    district?: string
+    city?: string
+    state?: string
+    zip_code?: string
+}
+
 export interface LOGIN_ADMIN_PROPS {
     username: string
     password: string

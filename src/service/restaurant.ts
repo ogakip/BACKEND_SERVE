@@ -5,10 +5,19 @@ import { compare, hash } from "bcrypt";
 import jwt from "jsonwebtoken";
 
 // Interfaces :)
-import { CREATE_RESTAURANT_PROPS, LOGIN_RESTAURANT_PROPS } from "../interfaces";
+import { CREATE_RESTAURANT_PROPS, EDIT_RESTAURANT_PROPS, LOGIN_RESTAURANT_PROPS } from "../interfaces";
 import { messages } from "../errors/messages";
 
 const RestaurantRepository = AppDataSource.getRepository(Restaurant);
+
+export const buildUpdateObject = (body: EDIT_RESTAURANT_PROPS) => {
+    return Object.entries(body).reduce((acc, [key, value]) => {
+        if (value !== undefined && value !== null) {
+            acc[key as keyof EDIT_RESTAURANT_PROPS] = value
+        }
+        return acc
+    }, {} as EDIT_RESTAURANT_PROPS)
+}
 
 export const CreateRestaurantService = async (RestaurantData: CREATE_RESTAURANT_PROPS) => {
     const { email, username, password, fullname, phone, city, state, district, street, number, zip_code } = RestaurantData;
@@ -63,11 +72,32 @@ export const LoginRestaurantService = async (LoginRestaurantData: LOGIN_RESTAURA
         throw new AppError(messages.RESTAURANT_LOGIN_ERROR)
     }
 
-    const accessToken = jwt.sign({ restaurant_id: findRestaurant.id }, 'SECRET_KEY', {
+    const jwtSecret = process.env.CLIENT_JWT_SECRET;
+
+    if (!jwtSecret) {
+        throw new Error("JWT Secret inválido ou não definido.");
+    }
+
+
+    const accessToken = jwt.sign({ restaurant_id: findRestaurant.id }, jwtSecret, {
         expiresIn: "7d"
     });
 
     return {
         accessToken
     }
+}
+
+export const EditRestaurantService = async (restaurant_id: number, EditRestaurantData: EDIT_RESTAURANT_PROPS) => {
+    const existingRestaurant = await RestaurantRepository.findOneBy({ id: restaurant_id })
+
+    if (!existingRestaurant) {
+        throw new AppError(messages.RESTAURANT_NOT_FOUND)
+    }
+
+    const updateData = buildUpdateObject(EditRestaurantData)
+
+    await RestaurantRepository.update(restaurant_id, updateData)
+
+    return { message: messages.SUCCESSFUL_EDIT }
 }
