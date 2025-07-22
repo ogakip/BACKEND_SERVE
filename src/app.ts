@@ -7,11 +7,13 @@ import { handleAppErrorMiddleware } from "./middlewares/handleAppError";
 import { MercadoPagoWebhook } from "./service/mp";
 import { RestaurantRoutes } from "./routers/restaurant";
 import { AdminRoutes } from "./routers/admin";
+import { SubscriptionsRoutes } from "./routers/subscriptions";
 
 export const app = express();
 app.use(express.json());
 app.use(cors());
 app.use("/admin", AdminRoutes)
 app.use("/restaurant", RestaurantRoutes);
+app.use("/subscriptions", SubscriptionsRoutes)
 app.use("/api/mercadopago", MercadoPagoWebhook);
 app.use(handleAppErrorMiddleware);
