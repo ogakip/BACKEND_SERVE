@@ -56,3 +56,18 @@ export interface CREATE_PLAN_PROPS {
     }
     is_active: boolean
 }
+
+export interface EDIT_PLAN_PROPS {
+    title?: string
+    description?: string
+    price?: number
+    type?: PlanType
+    recurrence?: PlanRecurrence
+    features?: {
+        maxEmployees: number;
+        maxTables: number;
+        num_licenses: number;
+        maxHourlyOrders: number;
+    }
+    is_active?: boolean
+}
