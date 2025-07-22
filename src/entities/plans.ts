@@ -1,12 +1,12 @@
 import { Column, Entity, PrimaryGeneratedColumn } from "typeorm";
 
-enum PlanType {
+export enum PlanType {
     BASIC = "basic",
     DELIVERY = "delivery",
     FULL = "full"
 }
 
-enum PlanRecurrence {
+export enum PlanRecurrence {
     MONTHLY = "monthly",
     YEARLY = "yearly"
 }
@@ -22,7 +22,7 @@ export class Plans {
     @Column({ type: "varchar" })
     description: string;
 
-    @Column({ type: "integer" })
+    @Column('decimal', { precision: 6, scale: 2 })
     price: number;
 
     @Column({ type: "enum", enum: PlanType })

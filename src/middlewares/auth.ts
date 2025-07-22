@@ -10,14 +10,45 @@ export const verifyToken = (req: Request, res: Response, next: NextFunction) => 
         throw new AppError("Não autorizado", 401);
     }
 
+    const jwtSecret = process.env.CLIENT_JWT_SECRET;
+
+    if (!jwtSecret) {
+        throw new Error("JWT Secret inválido ou não definido.");
+    }
+
     const splitToken = accessToken.split(" ");
 
-    jwt.verify(splitToken[1], 'SECRET_KEY', (error: any, decoded: any) => {
+    jwt.verify(splitToken[1], jwtSecret, (error: any, decoded: any) => {
         if (error) {
             throw new AppError("Token de autorização inválido", 401);
         }
 
         res.locals.user_id = decoded.user_id;
+    });
+    next();
+};
+
+export const verifyAdminToken = (req: Request, res: Response, next: NextFunction) => {
+    let accessToken = req.headers.authorization;
+
+    if (!accessToken) {
+        throw new AppError("Não autorizado", 401);
+    }
+
+    const jwtSecret = process.env.ADMIN_JWT_SECRET;
+
+    if (!jwtSecret) {
+        throw new Error("JWT Secret inválido ou não definido.");
+    }
+
+    const splitToken = accessToken.split(" ");
+
+    jwt.verify(splitToken[1], jwtSecret, (error: any, decoded: any) => {
+        if (error) {
+            throw new AppError("Token de autorização inválido", 401);
+        }
+
+        res.locals.admin_id = decoded.admin_id;
     });
     next();
 };
