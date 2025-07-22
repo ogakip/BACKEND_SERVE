@@ -23,7 +23,7 @@ export const verifyToken = (req: Request, res: Response, next: NextFunction) => 
             throw new AppError("Token de autorização inválido", 401);
         }
 
-        res.locals.user_id = decoded.user_id;
+        res.locals.restaurant_id = decoded.restaurant_id;
     });
     next();
 };
