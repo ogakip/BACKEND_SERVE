@@ -1,3 +1,4 @@
+import { FakeSubscriptionConfirmService } from './../service/subscription';
 import { Request, Response } from "express";
 import { CreateSubscriptionService, ListAllPlansService } from "../service/subscription";
 
@@ -13,5 +14,13 @@ export const CreateSubscription = async (req: Request, res: Response) => {
 
     const response = await CreateSubscriptionService(restaurant_id, Number(id));
 
-    return res.status(201).json(response)
+    return res.status(201).json(response);
+}
+
+export const FakeSubscriptionConfirm = async (req: Request, res: Response) => {
+        const { restaurant_id } = res.locals;
+
+        const response = await FakeSubscriptionConfirmService(restaurant_id);
+
+        return res.status(201).json(response);
 }

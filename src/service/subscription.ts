@@ -5,6 +5,8 @@ import { Subscriptions } from "../entities/subscriptions";
 import { checkIfPlanExists } from "../middlewares/findPlan";
 import { checkIfRestaurantExists } from "../middlewares/findRestaurant";
 import { messages } from "../errors/messages";
+import { checkIfSubscriptionsExists } from "../middlewares/findSusbsciprion";
+import { v4 as uuidv4 } from "uuid";
 
 const PlansRepository = AppDataSource.getRepository(Plans)
 const LicensesRepository = AppDataSource.getRepository(Licenses)
@@ -24,8 +26,43 @@ export const CreateSubscriptionService = async (restaurant_id: number, plan_id: 
         owner: findRestaurant,
         plan: findPlan,
         is_active: false,
-        
     })
 
     return { message: messages.SUCCESSFUL_SUBSCRIPTION }
+}
+
+export const FakeSubscriptionConfirmService = async (restaurant_id: number) => {
+    const findSubscription = await checkIfSubscriptionsExists(restaurant_id);
+    const findPlan = await checkIfPlanExists(findSubscription.plan.id);
+
+
+    const numLicenses = findPlan.features.num_licenses;
+
+    const licensesToCreate = Array.from({ length: numLicenses }).map(() =>
+        LicensesRepository.create({
+            key: uuidv4(),
+            subscription: findSubscription,
+            is_active: true
+        })
+    );
+
+    await LicensesRepository.save(licensesToCreate);
+    await SubscriptionsRepository.update(findSubscription.id, { is_active: true })
+
+    return { message: messages.SUCCESSFUL_REGISTER }
+}
+
+export const CancelSubscriptionService = async (restaurant_id: number) => {
+    const findSubscription = await checkIfSubscriptionsExists(restaurant_id);
+
+    const licenses = await LicensesRepository.find({
+        where: { subscription: findSubscription },
+    })
+
+    for (const license of licenses) {
+        license.is_active = false
+        await LicensesRepository.save(license)
+    }
+
+    await SubscriptionsRepository.delete(findSubscription.id);
 }

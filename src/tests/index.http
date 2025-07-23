@@ -1,0 +1,133 @@
+@clientToken = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJyZXN0YXVyYW50X2lkIjoyLCJpYXQiOjE3NTMyNzkyMTEsImV4cCI6MTc1Mzg4NDAxMX0.xz-VGfIWxZmAblyGjc77GBzVNB3F7MjW9yrh3LhvVOI"
+@admin_token = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJhZG1pbl9pZCI6MiwiaWF0IjoxNzUzMjc5OTM2LCJleHAiOjE3NTM4ODQ3MzZ9.LCdxGHSvqrlDXTxBa5U5lyERs5UzpAe0aqC5m24ZYb8"
+
+### Criar restaurante
+POST http://localhost:3333/restaurant/register
+Content-Type: application/json
+
+{
+	"fullname": "Pedrinho Lanches",
+	"email": "pedrinmatadordeporco@mail.com",
+	"username": "pedrindaspururuca",
+	"password": "N0m0x@2k25",
+	"phone": "5544999920655",
+	"city": "Cidade Gaúcha",
+	"state": "Paraná",
+	"district": "Aeroporto",
+	"street": "Ramiro Barcelos",
+	"number": "2014",
+	"zip_code": "87820000"
+}
+
+### Criar restaurante 2
+POST http://localhost:3333/restaurant/register
+Content-Type: application/json
+
+{
+	"fullname": "Thiago Pizzas",
+	"email": "thiaguindomel@mail.com",
+	"username": "tiaguin02",
+	"password": "N0m0x@2k25",
+	"phone": "5544999920655",
+	"city": "Cidade Gaúcha",
+	"state": "Paraná",
+	"district": "Aeroporto",
+	"street": "Ramiro Barcelos",
+	"number": "2014",
+	"zip_code": "87820000"
+}
+
+### Login Restaurant
+POST http://localhost:3333/restaurant/login
+Content-Type: application/json
+
+{
+	"username": "pedrindaspururuca",
+	"password": "N0m0x@2k25"
+}
+
+### Login Restaurant 2
+POST http://localhost:3333/restaurant/login
+Content-Type: application/json
+
+{
+	"username": "tiaguin02",
+	"password": "N0m0x@2k25"
+}
+
+### Create Admin
+POST http://localhost:3333/admin/register
+Content-Type: application/json
+
+{
+	"username": "admin",
+	"password": "admin"
+}
+
+### Login Admin
+# @name loginAdmin
+POST http://localhost:3333/admin/login
+Content-Type: application/json
+
+{
+  "username": "admin",
+  "password": "admin"
+}
+
+### Create Simples Local Plan
+POST http://localhost:3333/admin/plan
+Content-Type: application/json
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJhZG1pbl9pZCI6MiwiaWF0IjoxNzUzMjc5OTM2LCJleHAiOjE3NTM4ODQ3MzZ9.LCdxGHSvqrlDXTxBa5U5lyERs5UzpAe0aqC5m24ZYb8
+
+{
+	"title": "Local Essencial",
+	"description": "Plano básico anual para restaurantes de pequeno porte com atendimento local limitado.",
+	"price": 199.00,
+	"type": "basic",
+	"recurrence": "yearly",
+	"features": {
+		"maxEmployees": 2,
+		"maxTables": 3,
+		"num_licenses": 0,
+		"maxHourlyOrders": 10
+	}
+}
+
+### Create Simples Delivery Plan
+POST http://localhost:3333/admin/plan
+Content-Type: application/json
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJhZG1pbl9pZCI6MiwiaWF0IjoxNzUzMjc5OTM2LCJleHAiOjE3NTM4ODQ3MzZ9.LCdxGHSvqrlDXTxBa5U5lyERs5UzpAe0aqC5m24ZYb8
+
+{
+	"title": "Delivery Essencial",
+	"description": "Plano básico anual para restaurantes de pequeno porte com atendimento delivery limitado.",
+	"price": 199.00,
+	"type": "delivery",
+	"recurrence": "monthly",
+	"features": {
+		"maxEmployees": 2,
+		"maxTables": 0,
+		"num_licenses": 0,
+		"maxHourlyOrders": 10
+	}
+}
+
+### Create Simples Delivery Plan
+POST http://localhost:3333/admin/plan
+Content-Type: application/json
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJhZG1pbl9pZCI6MiwiaWF0IjoxNzUzMjc5OTM2LCJleHAiOjE3NTM4ODQ3MzZ9.LCdxGHSvqrlDXTxBa5U5lyERs5UzpAe0aqC5m24ZYb8
+
+{
+	"title": "Local Empresarial",
+	"description": "Plano avançado mensal para restaurantes de grande porte com grande atendimento local.",
+	"price": 80.90,
+	"type": "basic",
+	"recurrence": "monthly",
+	"features": {
+		"maxEmployees": 10,
+		"maxTables": 30,
+		"num_licenses": 5,
+		"maxHourlyOrders": 30
+	}
+}
+
