@@ -1,4 +1,4 @@
-import { Column, Entity, ManyToOne, PrimaryGeneratedColumn } from "typeorm";
+import { Column, Entity, JoinColumn, ManyToOne, PrimaryGeneratedColumn } from "typeorm";
 import { Recipe } from "./recipe";
 import { Ingredients } from "./ingredients";
 import { Restaurant } from "./restaurants";
@@ -14,11 +14,13 @@ export class RecipeIngredient {
     recipe: Recipe;
 
     @ManyToOne(() => Ingredients)
+    @JoinColumn({ name: 'ingredient_id' })
     Ingredients: Ingredients;
 
     @Column({ type: "decimal", precision: 10, scale: 2 })
     quantity: number;
 
     @ManyToOne(() => Restaurant, { nullable: false })
-    owner: Restaurant;
+    @JoinColumn({ name: 'owner_id' })
+    owner: Restaurant
 }

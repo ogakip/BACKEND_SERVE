@@ -21,9 +21,6 @@ export class Restaurant {
   is_master: boolean;
 
   @Column({ type: "varchar", nullable: true })
-  voucher_license: string | null;
-
-  @Column({ type: "varchar", nullable: true })
   phone: string;
 
   @Column({ type: "varchar", nullable: true })
