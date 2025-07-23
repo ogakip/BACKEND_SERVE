@@ -44,4 +44,7 @@ export class Plans {
 
     @CreateDateColumn({ type: 'timestamp' })
     created_at: Date;
+
+    @Column({ type: "varchar" })
+    mp_plan_id: string;
 }
