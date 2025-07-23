@@ -1,4 +1,4 @@
-import { Column, Entity, PrimaryGeneratedColumn } from "typeorm";
+import { Column, CreateDateColumn, Entity, PrimaryGeneratedColumn } from "typeorm";
 
 export enum PlanType {
     BASIC = "basic",
@@ -41,4 +41,7 @@ export class Plans {
 
     @Column({ default: true })
     is_active: boolean;
+
+    @CreateDateColumn({ type: 'timestamp' })
+    created_at: Date;
 }

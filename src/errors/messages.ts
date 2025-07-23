@@ -10,5 +10,6 @@ export const messages = {
     EMAIL_EMPTY_LOGIN: "E-mail é obrigatório no login.",
     UNAUTHORIZED: "Não autorizado.",
     ADMIN_NOT_FOUND: "Não autorizado.",
-    PLAN_NOT_FOUND: "Plano não encontrado."
+    PLAN_NOT_FOUND: "Plano não encontrado.",
+    SUCCESSFUL_CANCEL_SUBSCRIPTION: "Assinatura cancelada com sucesso."
 }

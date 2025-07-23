@@ -53,16 +53,19 @@ export const FakeSubscriptionConfirmService = async (restaurant_id: number) => {
 }
 
 export const CancelSubscriptionService = async (restaurant_id: number) => {
-    const findSubscription = await checkIfSubscriptionsExists(restaurant_id);
+    const subscription = await checkIfSubscriptionsExists(restaurant_id);
 
-    const licenses = await LicensesRepository.find({
-        where: { subscription: findSubscription },
-    })
+    // Desativa as licenças da assinatura
+    const licenses = await LicensesRepository.find({ where: { subscription } });
 
     for (const license of licenses) {
-        license.is_active = false
-        await LicensesRepository.save(license)
+        license.is_active = false;
+        license.owner = null;
     }
 
-    await SubscriptionsRepository.delete(findSubscription.id);
-}
+    await LicensesRepository.save(licenses);
+
+    await SubscriptionsRepository.remove(subscription);
+
+    return { message: messages.SUCCESSFUL_CANCEL_SUBSCRIPTION };
+};

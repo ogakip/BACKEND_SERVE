@@ -1,4 +1,4 @@
-import { Column, Entity, JoinColumn, ManyToOne, PrimaryGeneratedColumn } from "typeorm";
+import { Column, CreateDateColumn, Entity, JoinColumn, ManyToOne, PrimaryGeneratedColumn } from "typeorm";
 import { Restaurant } from "./restaurants";
 import { Plans } from "./plans";
 
@@ -14,6 +14,9 @@ export class Subscriptions {
     @ManyToOne(() => Plans, { nullable: false })
     @JoinColumn({ name: 'plan_id' })
     plan: Plans;
+
+    @CreateDateColumn({ type: 'timestamp' })
+    created_at: Date;
 
     @Column({ type: 'timestamp', nullable: true })
     expires_at: Date;
