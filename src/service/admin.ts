@@ -75,32 +75,39 @@ export const CreatePlanService = async (admin_id: number, PlanData: CREATE_PLAN_
 
     await checkIfAdminExists(admin_id)
 
-    const product = await stripe.products.create({
-        name: title,
-        description
-    });
+    try {
+        const product = await stripe.products.create({
+            name: title,
+            description,
+        });
 
-    const priceObj = await stripe.prices.create({
-        unit_amount: Math.round(price * 100),
-        currency: 'brl',
-        recurring: {
-            interval: recurrence === "monthly" ? "month" : "year",
-        },
-        product: product.id,
-    });
+        const priceObj = await stripe.prices.create({
+            unit_amount: Math.round(price * 100), // centavos
+            currency: 'brl',
+            recurring: {
+                interval: recurrence === "monthly" ? "month" : "year",
+            },
+            product: product.id,
+        });
 
-    await PlansRepository.save({
-        title,
-        description,
-        features,
-        price,
-        recurrence,
-        type,
-        stripe_product_id: product.id,
-        stripe_price_id: priceObj.id,
-    });
+        console.log("Produto e preço criados com sucesso!");
 
-    return { message: messages.SUCCESSFUL_REGISTER }
+        await PlansRepository.save({
+            title,
+            description,
+            features,
+            price,
+            recurrence,
+            type,
+            stripe_product_id: product.id,
+            stripe_price_id: priceObj.id,
+        });
+
+        return { message: messages.SUCCESSFUL_REGISTER }
+    } catch (error) {
+        console.error("Erro ao criar produto/preço no Stripe:", error);
+        throw error; // ou retorna erro se quiser tratar fora
+    }
 }
 
 export const EditPlanService = async (admin_id: number, plan_id: number, EditPlanData: EDIT_PLAN_PROPS) => {

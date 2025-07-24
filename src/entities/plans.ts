@@ -46,5 +46,8 @@ export class Plans {
     created_at: Date;
 
     @Column({ type: "varchar" })
-    mp_plan_id: string;
+    stripe_product_id: string;
+
+    @Column({ type: "varchar" })
+    stripe_price_id: string;
 }

@@ -1,10 +1,10 @@
 import { AppDataSource } from "../database/datasource";
-import { Subscriptions } from "../entities/subscriptions";
+import { Restaurant_Subscriptions } from "../entities/subscriptions";
 import { AppError } from "../errors/appError";
 import { messages } from "../errors/messages";
 import { checkIfRestaurantExists } from "./findRestaurant";
 
-const SubscriptionRepository = AppDataSource.getRepository(Subscriptions);
+const SubscriptionRepository = AppDataSource.getRepository(Restaurant_Subscriptions);
 
 export const checkIfSubscriptionsExists = async (restaurant_id: number) => {
     const findRestaurant = await checkIfRestaurantExists(restaurant_id);
