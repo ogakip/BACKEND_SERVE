@@ -1,9 +1,9 @@
 import { Column, Entity, JoinColumn, ManyToOne, OneToMany, PrimaryGeneratedColumn } from "typeorm";
 import { Restaurant } from "./restaurants";
-import { RecipeIngredient } from "./recipeIngredients";
+import { Recipe_Ingredients } from "./recipeIngredients";
 
 @Entity()
-export class Recipe {
+export class Restaurant_Recipe {
     @PrimaryGeneratedColumn()
     id: number;
 
@@ -19,8 +19,8 @@ export class Recipe {
     @Column({ type: "decimal", precision: 10, scale: 2, nullable: true })
     offer: number | null;
 
-    @OneToMany(() => RecipeIngredient, ri => ri.recipe, { cascade: true })
-    ingredients: RecipeIngredient[];
+    @OneToMany(() => Recipe_Ingredients, ri => ri.recipe, { cascade: true })
+    ingredients: Recipe_Ingredients[];
 
     @ManyToOne(() => Restaurant, { nullable: false })
     @JoinColumn({ name: 'owner_id' })

@@ -1,14 +1,15 @@
 import 'reflect-metadata';
-import { DataSource, Table } from 'typeorm';
+import { DataSource } from 'typeorm';
 import { Restaurant } from '../entities/restaurants';
-import { Ingredients } from '../entities/ingredients';
-import { Licenses } from '../entities/licenses';
-import { Order } from 'mercadopago';
+import { Restaurant_Ingredients } from '../entities/ingredients';
+import { Subscriptions_Licenses } from '../entities/licenses';
 import { Plans } from '../entities/plans';
-import { Recipe } from '../entities/recipe';
-import { RecipeIngredient } from '../entities/recipeIngredients';
-import { Subscriptions } from '../entities/subscriptions';
+import { Restaurant_Recipe } from '../entities/recipe';
+import { Recipe_Ingredients } from '../entities/recipeIngredients';
+import { Restaurant_Subscriptions } from '../entities/subscriptions';
 import { Admins } from '../entities/admin';
+import { Restaurant_Order  } from '../entities/orders';
+import { Restaurant_Tables } from '../entities/tables';
 
 export const AppDataSource = new DataSource({
   type: 'postgres',
@@ -19,7 +20,7 @@ export const AppDataSource = new DataSource({
   database: 'serve_db_test',
   synchronize: true, // ⛔ troque pra false em produção!
   logging: false,
-  entities: [Restaurant, Ingredients, Licenses, Order, Plans, Recipe, RecipeIngredient, Subscriptions, Table, Admins],
+  entities: [Restaurant, Restaurant_Ingredients, Subscriptions_Licenses, Restaurant_Order , Plans, Restaurant_Recipe, Recipe_Ingredients, Restaurant_Subscriptions, Restaurant_Tables, Admins],
   migrations: [],
   subscribers: [],
 });

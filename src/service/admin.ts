@@ -7,8 +7,7 @@ import { messages } from "../errors/messages";
 import jwt from "jsonwebtoken";
 import { CREATE_ADMIN_PROPS, CREATE_PLAN_PROPS, EDIT_PLAN_PROPS, LOGIN_ADMIN_PROPS } from "../interfaces";
 import { checkIfAdminExists } from "../middlewares/findAdmin";
-import { mp, preApprovalPlan } from "../lib/mp";
-import { PreApproval } from "mercadopago";
+import { stripe } from "../lib/stripe";
 
 const AdminsRepository = AppDataSource.getRepository(Admins)
 const PlansRepository = AppDataSource.getRepository(Plans)
@@ -75,20 +74,21 @@ export const CreatePlanService = async (admin_id: number, PlanData: CREATE_PLAN_
     const { title, description, features, price, recurrence, type } = PlanData;
 
     await checkIfAdminExists(admin_id)
-    
-    const CreatePlanOnMP = await preApprovalPlan.create({
-        body: {
-            reason: title,
-            auto_recurring: {
-                frequency: 1,
-                frequency_type: "months",
-                currency_id: "BRL",
-                transaction_amount: price
-            },
-            back_url: "https://www.google.com/",
-        }
-    })
-    
+
+    const product = await stripe.products.create({
+        name: title,
+        description
+    });
+
+    const priceObj = await stripe.prices.create({
+        unit_amount: Math.round(price * 100),
+        currency: 'brl',
+        recurring: {
+            interval: recurrence === "monthly" ? "month" : "year",
+        },
+        product: product.id,
+    });
+
     await PlansRepository.save({
         title,
         description,
@@ -96,7 +96,8 @@ export const CreatePlanService = async (admin_id: number, PlanData: CREATE_PLAN_
         price,
         recurrence,
         type,
-        mp_plan_id: CreatePlanOnMP.id
+        stripe_product_id: product.id,
+        stripe_price_id: priceObj.id,
     });
 
     return { message: messages.SUCCESSFUL_REGISTER }
