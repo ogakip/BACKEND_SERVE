@@ -7,6 +7,7 @@ import jwt from "jsonwebtoken";
 // Interfaces :)
 import { CREATE_RESTAURANT_PROPS, EDIT_RESTAURANT_PROPS, LOGIN_RESTAURANT_PROPS } from "../interfaces";
 import { messages } from "../errors/messages";
+import { stripe } from "../lib/stripe";
 
 const RestaurantRepository = AppDataSource.getRepository(Restaurant);
 
@@ -21,6 +22,8 @@ export const buildUpdateObject = (body: EDIT_RESTAURANT_PROPS) => {
 
 export const CreateRestaurantService = async (RestaurantData: CREATE_RESTAURANT_PROPS) => {
     const { email, username, password, fullname, phone, city, state, district, street, number, zip_code } = RestaurantData;
+    console.log('teste1')
+
     const existingRestaurant = await RestaurantRepository.findOne({
         where: [
             { email },
@@ -28,13 +31,24 @@ export const CreateRestaurantService = async (RestaurantData: CREATE_RESTAURANT_
         ]
     });
 
+    console.log('teste2')
     if (existingRestaurant) {
         throw new AppError(messages.REGISTER_ALREADY_EXISTS)
     }
 
-    const hashPassword = await hash(password, 10)
+    const hashPassword = await hash(password, 10);
+    let customer;
+    try {
+        customer = await stripe.customers.create({
+            email,
+            name: fullname
+        });
+    } catch (error) {
+        console.error('Erro ao criar customer na Stripe:', error);
+        throw new AppError('Falha ao registrar cliente na plataforma de pagamentos. Tente novamente mais tarde.');
+    }
 
-    RestaurantRepository.save({
+    const newRestaurant = RestaurantRepository.create({
         email,
         username,
         password: hashPassword,
@@ -45,8 +59,22 @@ export const CreateRestaurantService = async (RestaurantData: CREATE_RESTAURANT_
         district,
         street,
         number,
-        zip_code
-    })
+        zip_code,
+        stripe_customer_id: customer.id
+    });
+
+    await RestaurantRepository.save(newRestaurant);
+
+    try {
+        await stripe.customers.update(customer.id, {
+            metadata: {
+                restaurant_id: newRestaurant.id
+            }
+        });
+    } catch (error) {
+        console.warn('Não foi possível atualizar metadata do Stripe:', error);
+        // Não precisa falhar a criação por isso, apenas avisa
+    }
 
     return { message: messages.SUCCESSFUL_REGISTER }
 }

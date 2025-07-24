@@ -23,21 +23,7 @@ export const CreateSubscriptionService = async (restaurant_id: number, plan_id: 
     const findPlan = await checkIfPlanExists(plan_id);
     const findRestaurant = await checkIfRestaurantExists(restaurant_id);
 
-    // const customer = await stripe.customers.create({
-    //     email: findRestaurant.email,
-    //     name: findRestaurant.fullname,
-    //     payment_method: "pm_card_visa",
-    //     invoice_settings: {
-    //         default_payment_method: 'pm_card_visa',
-    //     },
-    // });
-
     try {
-        // const customer = await stripe.customers.create({
-        //     email: findRestaurant.email,
-        //     name: findRestaurant.fullname
-        // });
-
         const session = await stripe.checkout.sessions.create({
             mode: 'subscription',
             line_items: [
