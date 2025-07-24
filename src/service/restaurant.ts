@@ -22,7 +22,6 @@ export const buildUpdateObject = (body: EDIT_RESTAURANT_PROPS) => {
 
 export const CreateRestaurantService = async (RestaurantData: CREATE_RESTAURANT_PROPS) => {
     const { email, username, password, fullname, phone, city, state, district, street, number, zip_code } = RestaurantData;
-    console.log('teste1')
 
     const existingRestaurant = await RestaurantRepository.findOne({
         where: [
@@ -30,8 +29,7 @@ export const CreateRestaurantService = async (RestaurantData: CREATE_RESTAURANT_
             { username }
         ]
     });
-
-    console.log('teste2')
+    
     if (existingRestaurant) {
         throw new AppError(messages.REGISTER_ALREADY_EXISTS)
     }

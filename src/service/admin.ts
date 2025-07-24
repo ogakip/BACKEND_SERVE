@@ -90,8 +90,6 @@ export const CreatePlanService = async (admin_id: number, PlanData: CREATE_PLAN_
             product: product.id,
         });
 
-        console.log("Produto e preço criados com sucesso!");
-
         await PlansRepository.save({
             title,
             description,
