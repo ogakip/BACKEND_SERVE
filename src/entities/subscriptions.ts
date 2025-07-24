@@ -3,7 +3,7 @@ import { Restaurant } from "./restaurants";
 import { Plans } from "./plans";
 
 @Entity()
-export class Subscriptions {
+export class Restaurant_Subscriptions {
     @PrimaryGeneratedColumn()
     id: number;
 

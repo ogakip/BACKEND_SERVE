@@ -7,7 +7,7 @@ enum TableStatus {
 }
 
 @Entity()
-export class Table {
+export class Restaurant_Tables {
     @PrimaryGeneratedColumn()
     id: number;
 

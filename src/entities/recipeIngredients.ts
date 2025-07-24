@@ -1,21 +1,21 @@
 import { Column, Entity, JoinColumn, ManyToOne, PrimaryGeneratedColumn } from "typeorm";
-import { Recipe } from "./recipe";
-import { Ingredients } from "./ingredients";
+import { Restaurant_Recipe } from "./recipe";
+import { Restaurant_Ingredients } from "./ingredients";
 import { Restaurant } from "./restaurants";
 
 @Entity()
-export class RecipeIngredient {
+export class Recipe_Ingredients {
     @PrimaryGeneratedColumn()
     id: number;
 
-    @ManyToOne(() => Recipe, recipe => recipe.ingredients, {
+    @ManyToOne(() => Restaurant_Recipe, recipe => recipe.ingredients, {
         onDelete: "CASCADE"
     })
-    recipe: Recipe;
+    recipe: Restaurant_Recipe;
 
-    @ManyToOne(() => Ingredients)
+    @ManyToOne(() => Restaurant_Ingredients)
     @JoinColumn({ name: 'ingredient_id' })
-    Ingredients: Ingredients;
+    Ingredients: Restaurant_Ingredients;
 
     @Column({ type: "decimal", precision: 10, scale: 2 })
     quantity: number;

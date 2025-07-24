@@ -1,6 +1,7 @@
-import { Column, CreateDateColumn, Entity, JoinColumn, ManyToOne, PrimaryGeneratedColumn, Table } from "typeorm";
-import { Recipe } from "./recipe";
+import { Column, CreateDateColumn, Entity, JoinColumn, ManyToOne, PrimaryGeneratedColumn } from "typeorm";
+import { Restaurant_Recipe } from "./recipe";
 import { Restaurant } from "./restaurants";
+import { Restaurant_Tables } from "./tables";
 
 enum OrderStatus {
     PENDING = "pending",
@@ -10,15 +11,15 @@ enum OrderStatus {
 }
 
 @Entity()
-export class Order {
+export class Restaurant_Order {
     @PrimaryGeneratedColumn()
     id: number;
 
-    @ManyToOne(() => Table)
-    table: Table;
+    @ManyToOne(() => Restaurant_Tables)
+    table: Restaurant_Tables;
 
-    @ManyToOne(() => Recipe)
-    recipe: Recipe;
+    @ManyToOne(() => Restaurant_Recipe)
+    recipe: Restaurant_Recipe;
 
     @Column({ type: "enum", enum: OrderStatus })
     status: OrderStatus;

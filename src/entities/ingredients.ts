@@ -2,7 +2,7 @@ import { Column, Entity, JoinColumn, ManyToOne, PrimaryGeneratedColumn } from "t
 import { Restaurant } from "./restaurants";
 
 @Entity()
-export class Ingredients {
+export class Restaurant_Ingredients {
     @PrimaryGeneratedColumn()
     id: number;
 

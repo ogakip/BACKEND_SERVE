@@ -1,9 +1,9 @@
 import { Column, CreateDateColumn, Entity, JoinColumn, ManyToOne, OneToOne, PrimaryGeneratedColumn } from "typeorm";
 import { Restaurant } from "./restaurants";
-import { Subscriptions } from "./subscriptions";
+import { Restaurant_Subscriptions } from "./subscriptions";
 
 @Entity()
-export class Licenses {
+export class Subscriptions_Licenses {
     @PrimaryGeneratedColumn()
     id: number;
 
@@ -14,9 +14,9 @@ export class Licenses {
     @JoinColumn({ name: 'owner_id' })
     owner: Restaurant | null
 
-    @ManyToOne(() => Subscriptions, { nullable: false, onDelete: 'CASCADE' })
+    @ManyToOne(() => Restaurant_Subscriptions, { nullable: false, onDelete: 'CASCADE' })
     @JoinColumn({ name: 'subscription_id' })
-    subscription: Subscriptions;
+    subscription: Restaurant_Subscriptions;
 
     @Column({ default: true })
     is_active: boolean;

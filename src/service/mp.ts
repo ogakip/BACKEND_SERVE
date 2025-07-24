@@ -1,25 +1,30 @@
-import { Request, Response } from "express";
+import mercadopago from 'mercadopago';
+import { CREATE_PLAN_PROPS } from '../interfaces';
 
-export const MercadoPagoWebhook = async (req: Request, res: Response) => {
-  try {
-    const { action, type, data } = req.body;
+export const CreatePaymentLinkService = async (PlanData: CREATE_PLAN_PROPS) => {
+  const { title, price,  } = PlanData;
 
-    console.log("📩 Webhook recebido do Mercado Pago:");
-    console.log("Action:", action);
-    console.log("Type:", type);
-    console.log("Data:", data);
+  const preference = {
+    items: [
+      {
+        title: 'Plano Mensal Chefia',
+        quantity: 1,
+        currency_id: 'BRL',
+        unit_price: 39.90,
+      },
+    ],
+    back_urls: {
+      success: 'http://localhost:3000/sucesso',
+      failure: 'http://localhost:3000/falha',
+      pending: 'http://localhost:3000/pendente',
+    },
+    auto_return: 'approved',
+    metadata: {
+      plano_id: 1,
+      restaurant_id: 42,
+    },
+  };
 
-    // Exemplo: Se o tipo for pagamento aprovado
-    if (type === "payment") {
-      const paymentId = data.id;
-
-      // Aqui você pode consultar o pagamento e ativar o plano do cliente
-      // await processPayment(paymentId);
-    }
-
-    res.status(200).send("OK");
-  } catch (error) {
-    console.error("Erro no Webhook:", error);
-    res.status(500).send("Erro interno");
-  }
+  const response = await mercadopago.preferences.create(preference);
+  return response.body.init_point;
 };
