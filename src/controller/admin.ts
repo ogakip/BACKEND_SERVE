@@ -1,5 +1,5 @@
 import { Request, Response } from "express";
-import { CreateAdminService, CreatePlanService, DeletePlanService, EditPlanService, LoginAdminService } from "../service/admin";
+import { CreateAdminService, CreatePlanService, CancelPlanService, EditPlanService, LoginAdminService } from "../service/admin";
 
 export const CreateAadmin = async (req: Request, res: Response) => {
     const service = await CreateAdminService(req.body);
@@ -27,10 +27,10 @@ export const EditPlan = async (req: Request, res: Response) => {
     return res.status(200).json(service);
 }
 
-export const DeletePlan = async (req: Request, res: Response) => {
+export const CancelPlan = async (req: Request, res: Response) => {
     const { id } = req.params;
 
-    const service = await DeletePlanService(res.locals.admin_id, Number(id));
+    const service = await CancelPlanService(res.locals.admin_id, Number(id), req.body);
 
-    return res.status(204).send()
+    return res.status(200).json(service)
 }

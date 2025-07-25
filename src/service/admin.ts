@@ -1,3 +1,4 @@
+import { checkIfPlanExists } from './../middlewares/findPlan';
 import { compare, hash } from "bcrypt";
 import { AppDataSource } from "../database/datasource";
 import { Admins } from "../entities/admin";
@@ -8,6 +9,7 @@ import jwt from "jsonwebtoken";
 import { CREATE_ADMIN_PROPS, CREATE_PLAN_PROPS, EDIT_PLAN_PROPS, LOGIN_ADMIN_PROPS } from "../interfaces";
 import { checkIfAdminExists } from "../middlewares/findAdmin";
 import { stripe } from "../lib/stripe";
+import { addDays } from 'date-fns';
 
 const AdminsRepository = AppDataSource.getRepository(Admins)
 const PlansRepository = AppDataSource.getRepository(Plans)
@@ -116,10 +118,18 @@ export const EditPlanService = async (admin_id: number, plan_id: number, EditPla
     return { message: messages.SUCCESSFUL_EDIT }
 }
 
-export const DeletePlanService = async (admin_id: number, plan_id: number) => {
+export const CancelPlanService = async (admin_id: number, plan_id: number, { valid_until }: { valid_until: Date }) => {
     await checkIfAdminExists(admin_id)
+    const findPlan = await checkIfPlanExists(plan_id);
 
-    await PlansRepository.delete(plan_id)
+    await stripe.prices.update(findPlan.stripe_price_id, {
+        active: false,
+    });
+ 
+    await PlansRepository.update(plan_id, {
+        is_active: false,
+        valid_until
+    });
 
-    return
+    return { message: messages.SUCCESSFUL_CANCEL_PLAN }
 }

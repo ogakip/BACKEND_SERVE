@@ -50,4 +50,7 @@ export class Plans {
 
     @Column({ type: "varchar" })
     stripe_price_id: string;
+
+    @Column({ type: "timestamp", nullable: true })
+    valid_until: Date | null
 }
