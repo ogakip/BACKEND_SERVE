@@ -23,4 +23,7 @@ export class Restaurant_Subscriptions {
 
     @Column({ default: true })
     is_active: boolean;
+
+    @Column({ type: "varchar", nullable: true })
+    payment_link: string | null
 }

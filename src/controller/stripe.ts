@@ -1,7 +1,7 @@
 import Stripe from 'stripe';
 import { Request, Response } from 'express';
 import { stripe } from '../lib/stripe';
-import { FakeSubscriptionConfirmService } from '../service/subscription';
+import { ConfirmSubscriptionPaymentService, FailedSubscriptionPaymentService } from '../service/subscription';
 
 export const stripeWebhook = async (req: Request, res: Response) => {
     const sig = req.headers['stripe-signature']!;
@@ -13,21 +13,30 @@ export const stripeWebhook = async (req: Request, res: Response) => {
         return res.status(400).send(`Webhook Error: ${(err as Error).message}`);
     }
 
-    if (event.type === 'checkout.session.completed') {
-        const session = event.data.object as Stripe.Checkout.Session;
+    if (event.type === 'invoice.payment_failed') {
+        console.log('Estou recebendo o webhook de falha no pagamento 🔥')
+        const invoice = event.data.object as any;
+        const subscription = await stripe.subscriptions.retrieve(invoice.subscription as string);
+        const restaurant_id = parseInt(subscription.metadata.restaurant_id);
 
-        const subscriptionId = session.subscription as string;
-        const customerId = session.customer as string;
-
-        // Pega os metadados que você setou na sessão
-        const restaurant_id = parseInt(session.metadata?.restaurant_id!);
-
-        // Confirma a assinatura no banco
-        await FakeSubscriptionConfirmService(restaurant_id);
+        await FailedSubscriptionPaymentService(restaurant_id, invoice.id);
 
         return res.json({ received: true });
     }
+    if (event.type === 'invoice.paid') {
+        console.log('Recebido invoice.paid 🔥');
+        const invoice = event.data.object as any;
+
+        const subscriptionId = invoice.parent?.subscription_details?.subscription;
+
+        // Recupera a assinatura completa
+        await stripe.subscriptions.retrieve(subscriptionId);
+        const restaurant_id = parseInt(invoice.parent?.subscription_details?.metadata?.restaurant_id);
+        await ConfirmSubscriptionPaymentService(restaurant_id);
+
+        return res.json({ received: true });
 
 
-    res.status(200).send('ok');
-};
+        res.status(200).send('ok');
+    }
+}
