@@ -14,5 +14,6 @@ export const messages = {
     SUCCESSFUL_CANCEL_SUBSCRIPTION: "Assinatura cancelada com sucesso.",
     PAYMENT_LINK_ERROR: "Houve um problema no geramento do link de pagamento.",
     SUBSCRIPTION_PAYMENT_FAILED: "Houve um problema no pagamento da sua assinatura.",
-    SUCCESSFUL_CANCEL_PLAN: "Plano cancelado com sucesso."
+    SUCCESSFUL_CANCEL_PLAN: "Plano cancelado com sucesso.",
+    SUBSCRIPTION_STRIPE_NOTFOUND: "Assinatura Stripe não encontrada."
 }

@@ -69,7 +69,7 @@ export const CreateSubscriptionService = async (restaurant_id: number, plan_id: 
     return { payment_link: checkoutTest }
 }
 
-export const ConfirmSubscriptionPaymentService = async (restaurant_id: number) => {
+export const ConfirmSubscriptionPaymentService = async (restaurant_id: number, subscription_id: string) => {
     const subscription = await checkIfSubscriptionsExists(restaurant_id);
     const plan = await checkIfPlanExists(subscription.plan.id);
 
@@ -100,7 +100,8 @@ export const ConfirmSubscriptionPaymentService = async (restaurant_id: number) =
 
     await SubscriptionsRepository.update(subscription.id, {
         is_active: true,
-        expires_at
+        expires_at,
+        stripe_subscription_id: subscription_id
     });
 
     return { message: messages.SUCCESSFUL_REGISTER };
@@ -117,21 +118,27 @@ export const FailedSubscriptionPaymentService = async (restaurant_id: number, in
     return { message: messages.SUBSCRIPTION_PAYMENT_FAILED };
 };
 
-
 export const CancelSubscriptionService = async (restaurant_id: number) => {
     const subscription = await checkIfSubscriptionsExists(restaurant_id);
 
-    // Desativa as licenças da assinatura
-    const licenses = await LicensesRepository.find({ where: { subscription } });
+    const licenses = await LicensesRepository.find({ where: { subscription: { id: subscription.id } } });
 
+    
+    if (!subscription.stripe_subscription_id) {
+        throw new AppError(messages.SUBSCRIPTION_STRIPE_NOTFOUND)
+    }
+    await stripe.subscriptions.cancel(subscription.stripe_subscription_id)
     for (const license of licenses) {
         license.is_active = false;
         license.owner = null;
     }
-
+    console.log(licenses)
+    
     await LicensesRepository.save(licenses);
 
-    await SubscriptionsRepository.remove(subscription);
+    await SubscriptionsRepository.update(subscription.id, {
+        is_active: false,
+    });
 
     return { message: messages.SUCCESSFUL_CANCEL_SUBSCRIPTION };
 };

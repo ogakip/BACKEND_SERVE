@@ -26,4 +26,7 @@ export class Restaurant_Subscriptions {
 
     @Column({ type: "varchar", nullable: true })
     payment_link: string | null
+
+    @Column({ type: "varchar", nullable: true })
+    stripe_subscription_id: string | null
 }
