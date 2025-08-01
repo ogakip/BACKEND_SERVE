@@ -19,7 +19,7 @@ export class Restaurant_Subscriptions {
     created_at: Date;
 
     @Column({ type: 'timestamp', nullable: true })
-    expires_at: Date;
+    expires_at: Date | null;
 
     @Column({ default: true })
     is_active: boolean;

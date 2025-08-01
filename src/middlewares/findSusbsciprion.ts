@@ -7,12 +7,11 @@ import { checkIfRestaurantExists } from "./findRestaurant";
 const SubscriptionRepository = AppDataSource.getRepository(Restaurant_Subscriptions);
 
 export const checkIfSubscriptionsExists = async (restaurant_id: number) => {
-    const findRestaurant = await checkIfRestaurantExists(restaurant_id);
     const findSubscription = await SubscriptionRepository.findOne({
         where: { owner: { id: restaurant_id } },
         relations: ['plan'],
+        order: { created_at: 'DESC' },
     });
-
     if (!findSubscription) {
         throw new AppError(messages.SUBSCRIPTION_NOT_FOUND);
     }

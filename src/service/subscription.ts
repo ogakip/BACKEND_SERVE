@@ -79,8 +79,12 @@ export const ConfirmSubscriptionPaymentService = async (restaurant_id: number, s
 
     // Verifica se já existem licenças vinculadas
     const existingLicenses = await LicensesRepository.find({
-        where: { subscription }
+        where: { subscription: { id: subscription.id } }
     });
+
+    console.log('-------------------------------')
+    console.log(existingLicenses)
+    console.log('-------------------------------')
 
     if (existingLicenses.length > 0) {
         for (const license of existingLicenses) {
@@ -100,8 +104,8 @@ export const ConfirmSubscriptionPaymentService = async (restaurant_id: number, s
 
     await SubscriptionsRepository.update(subscription.id, {
         is_active: true,
-        expires_at,
-        stripe_subscription_id: subscription_id
+        stripe_subscription_id: subscription_id,
+        expires_at
     });
 
     return { message: messages.SUCCESSFUL_REGISTER };
@@ -111,6 +115,8 @@ export const FailedSubscriptionPaymentService = async (restaurant_id: number, in
     const subscription = await checkIfSubscriptionsExists(restaurant_id);
     const invoice = await stripe.invoices.retrieve(invoice_id);
     const paymentLink = invoice.hosted_invoice_url
+
+    console.log('teste')
 
     await LicensesRepository.update({ subscription }, { is_active: false });
     await SubscriptionsRepository.update(subscription.id, { is_active: false, payment_link: paymentLink });
@@ -123,7 +129,7 @@ export const CancelSubscriptionService = async (restaurant_id: number) => {
 
     const licenses = await LicensesRepository.find({ where: { subscription: { id: subscription.id } } });
 
-    
+
     if (!subscription.stripe_subscription_id) {
         throw new AppError(messages.SUBSCRIPTION_STRIPE_NOTFOUND)
     }
@@ -133,7 +139,7 @@ export const CancelSubscriptionService = async (restaurant_id: number) => {
         license.owner = null;
     }
     console.log(licenses)
-    
+
     await LicensesRepository.save(licenses);
 
     await SubscriptionsRepository.update(subscription.id, {

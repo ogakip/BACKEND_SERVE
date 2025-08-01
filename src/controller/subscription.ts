@@ -1,4 +1,4 @@
-import { CancelSubscriptionService, ConfirmSubscriptionPaymentService } from './../service/subscription';
+import { CancelSubscriptionService } from './../service/subscription';
 import { Request, Response } from "express";
 import { CreateSubscriptionService, ListAllPlansService } from "../service/subscription";
 

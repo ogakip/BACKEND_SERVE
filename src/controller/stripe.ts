@@ -13,22 +13,18 @@ export const stripeWebhook = async (req: Request, res: Response) => {
         return res.status(400).send(`Webhook Error: ${(err as Error).message}`);
     }
 
-    if (event.type === 'checkout.session.completed') {
-        const session = event.data.object;
-
-        const stripe_subscription_id = session.subscription;
-
-    }
-
     if (event.type === 'invoice.payment_failed') {
         console.log('Estou recebendo o webhook de falha no pagamento 🔥')
         const invoice = event.data.object as any;
-        const subscription = await stripe.subscriptions.retrieve(invoice.subscription as string);
-        const restaurant_id = parseInt(subscription.metadata.restaurant_id);
-
-        await FailedSubscriptionPaymentService(restaurant_id, invoice.id);
-
-        return res.json({ received: true });
+        try {
+            const subscription = await stripe.subscriptions.retrieve(invoice.subscription as string);
+            console.log(subscription)
+            const restaurant_id = parseInt(subscription.metadata.restaurant_id);
+            await FailedSubscriptionPaymentService(restaurant_id, invoice.id);
+            return res.json({ received: true });
+        } catch (error: any) {
+            console.log(error);
+        }
     }
     if (event.type === 'invoice.paid') {
         console.log('Recebido invoice.paid 🔥');
