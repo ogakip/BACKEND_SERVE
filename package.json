@@ -19,8 +19,10 @@
   "homepage": "https://github.com/ogakip/BACKEND_SERVE#readme",
   "description": "",
   "dependencies": {
+    "@types/date-fns": "^2.5.3",
     "bcrypt": "^6.0.0",
     "cors": "^2.8.5",
+    "date-fns": "^4.1.0",
     "dotenv": "^17.2.0",
     "express": "^4.21.2",
     "jsonwebtoken": "^9.0.2",

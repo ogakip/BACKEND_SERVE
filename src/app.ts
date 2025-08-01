@@ -7,8 +7,14 @@ import { handleAppErrorMiddleware } from "./middlewares/handleAppError";
 import { RestaurantRoutes } from "./routers/restaurant";
 import { AdminRoutes } from "./routers/admin";
 import { SubscriptionsRoutes } from "./routers/subscriptions";
+import { StripeRouter } from "./routers/stripe";
 
 export const app = express();
+app.use(
+    '/webhook',
+    express.raw({ type: 'application/json' }),
+    StripeRouter
+);
 app.use(express.json());
 app.use(cors());
 app.use("/admin", AdminRoutes)

@@ -40,4 +40,7 @@ export class Restaurant {
 
   @Column({ type: "varchar", nullable: true })
   zip_code: string;
+
+  @Column({ type: "varchar" })
+  stripe_customer_id: string
 }

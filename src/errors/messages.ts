@@ -11,5 +11,9 @@ export const messages = {
     UNAUTHORIZED: "Não autorizado.",
     ADMIN_NOT_FOUND: "Não autorizado.",
     PLAN_NOT_FOUND: "Plano não encontrado.",
-    SUCCESSFUL_CANCEL_SUBSCRIPTION: "Assinatura cancelada com sucesso."
+    SUCCESSFUL_CANCEL_SUBSCRIPTION: "Assinatura cancelada com sucesso.",
+    PAYMENT_LINK_ERROR: "Houve um problema no geramento do link de pagamento.",
+    SUBSCRIPTION_PAYMENT_FAILED: "Houve um problema no pagamento da sua assinatura.",
+    SUCCESSFUL_CANCEL_PLAN: "Plano cancelado com sucesso.",
+    SUBSCRIPTION_STRIPE_NOTFOUND: "Assinatura Stripe não encontrada."
 }

@@ -1,3 +1,4 @@
+import { checkIfPlanExists } from './../middlewares/findPlan';
 import { compare, hash } from "bcrypt";
 import { AppDataSource } from "../database/datasource";
 import { Admins } from "../entities/admin";
@@ -8,6 +9,7 @@ import jwt from "jsonwebtoken";
 import { CREATE_ADMIN_PROPS, CREATE_PLAN_PROPS, EDIT_PLAN_PROPS, LOGIN_ADMIN_PROPS } from "../interfaces";
 import { checkIfAdminExists } from "../middlewares/findAdmin";
 import { stripe } from "../lib/stripe";
+import { addDays } from 'date-fns';
 
 const AdminsRepository = AppDataSource.getRepository(Admins)
 const PlansRepository = AppDataSource.getRepository(Plans)
@@ -75,32 +77,37 @@ export const CreatePlanService = async (admin_id: number, PlanData: CREATE_PLAN_
 
     await checkIfAdminExists(admin_id)
 
-    const product = await stripe.products.create({
-        name: title,
-        description
-    });
+    try {
+        const product = await stripe.products.create({
+            name: title,
+            description,
+        });
 
-    const priceObj = await stripe.prices.create({
-        unit_amount: Math.round(price * 100),
-        currency: 'brl',
-        recurring: {
-            interval: recurrence === "monthly" ? "month" : "year",
-        },
-        product: product.id,
-    });
+        const priceObj = await stripe.prices.create({
+            unit_amount: Math.round(price * 100), // centavos
+            currency: 'brl',
+            recurring: {
+                interval: recurrence === "monthly" ? "month" : "year",
+            },
+            product: product.id,
+        });
 
-    await PlansRepository.save({
-        title,
-        description,
-        features,
-        price,
-        recurrence,
-        type,
-        stripe_product_id: product.id,
-        stripe_price_id: priceObj.id,
-    });
+        await PlansRepository.save({
+            title,
+            description,
+            features,
+            price,
+            recurrence,
+            type,
+            stripe_product_id: product.id,
+            stripe_price_id: priceObj.id,
+        });
 
-    return { message: messages.SUCCESSFUL_REGISTER }
+        return { message: messages.SUCCESSFUL_REGISTER }
+    } catch (error) {
+        console.error("Erro ao criar produto/preço no Stripe:", error);
+        throw error; // ou retorna erro se quiser tratar fora
+    }
 }
 
 export const EditPlanService = async (admin_id: number, plan_id: number, EditPlanData: EDIT_PLAN_PROPS) => {
@@ -111,10 +118,18 @@ export const EditPlanService = async (admin_id: number, plan_id: number, EditPla
     return { message: messages.SUCCESSFUL_EDIT }
 }
 
-export const DeletePlanService = async (admin_id: number, plan_id: number) => {
+export const CancelPlanService = async (admin_id: number, plan_id: number, { valid_until }: { valid_until: Date }) => {
     await checkIfAdminExists(admin_id)
+    const findPlan = await checkIfPlanExists(plan_id);
 
-    await PlansRepository.delete(plan_id)
+    await stripe.prices.update(findPlan.stripe_price_id, {
+        active: false,
+    });
+ 
+    await PlansRepository.update(plan_id, {
+        is_active: false,
+        valid_until
+    });
 
-    return
+    return { message: messages.SUCCESSFUL_CANCEL_PLAN }
 }
