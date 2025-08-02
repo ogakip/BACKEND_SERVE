@@ -17,4 +17,5 @@ export const messages = {
     SUCCESSFUL_CANCEL_PLAN: "Plano cancelado com sucesso.",
     SUBSCRIPTION_STRIPE_NOTFOUND: "Assinatura Stripe não encontrada.",
     MAX_TABLES_LENGTH: "Máximo de mesas do plano atingido.",
+    TABLE_NOT_FOUND: "Mesa não encontrada."
 }

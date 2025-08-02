@@ -12,7 +12,7 @@ export class Restaurant_Tables {
     id: number;
 
     @Column({ type: "varchar", nullable: true })
-    client: string;
+    client: string | null;
 
     @Column({ type: "enum", enum: TableStatus })
     status: TableStatus;
