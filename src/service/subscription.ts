@@ -1,7 +1,7 @@
 import { AppDataSource } from "../database/datasource";
 import { Plans } from "../entities/plans";
 import { Subscriptions_Licenses } from "../entities/licenses";
-import { Restaurant_Subscriptions } from "../entities/subscriptions";
+import { Restaurant_Subscriptions, SubscriptionStatus } from "../entities/subscriptions";
 import { checkIfPlanExists } from "../middlewares/findPlan";
 import { checkIfRestaurantExists } from "../middlewares/findRestaurant";
 import { messages } from "../errors/messages";
@@ -28,7 +28,7 @@ export const CreateSubscriptionService = async (restaurant_id: number, plan_id: 
     const newSubscription = SubscriptionsRepository.create({
         owner: findRestaurant,
         plan: findPlan,
-        is_active: false,
+        status: SubscriptionStatus.PENDING,
     })
 
     let checkoutTest
@@ -82,10 +82,6 @@ export const ConfirmSubscriptionPaymentService = async (restaurant_id: number, s
         where: { subscription: { id: subscription.id } }
     });
 
-    console.log('-------------------------------')
-    console.log(existingLicenses)
-    console.log('-------------------------------')
-
     if (existingLicenses.length > 0) {
         for (const license of existingLicenses) {
             license.is_active = true;
@@ -103,7 +99,7 @@ export const ConfirmSubscriptionPaymentService = async (restaurant_id: number, s
     }
 
     await SubscriptionsRepository.update(subscription.id, {
-        is_active: true,
+        status: SubscriptionStatus.ACTIVE,
         stripe_subscription_id: subscription_id,
         expires_at
     });
@@ -116,10 +112,8 @@ export const FailedSubscriptionPaymentService = async (restaurant_id: number, in
     const invoice = await stripe.invoices.retrieve(invoice_id);
     const paymentLink = invoice.hosted_invoice_url
 
-    console.log('teste')
-
     await LicensesRepository.update({ subscription }, { is_active: false });
-    await SubscriptionsRepository.update(subscription.id, { is_active: false, payment_link: paymentLink });
+    await SubscriptionsRepository.update(subscription.id, { status: SubscriptionStatus.NOTPAID, payment_link: paymentLink });
 
     return { message: messages.SUBSCRIPTION_PAYMENT_FAILED };
 };
@@ -138,12 +132,11 @@ export const CancelSubscriptionService = async (restaurant_id: number) => {
         license.is_active = false;
         license.owner = null;
     }
-    console.log(licenses)
 
     await LicensesRepository.save(licenses);
 
     await SubscriptionsRepository.update(subscription.id, {
-        is_active: false,
+        status: SubscriptionStatus.CANCELED,
     });
 
     return { message: messages.SUCCESSFUL_CANCEL_SUBSCRIPTION };

@@ -15,5 +15,10 @@ export const messages = {
     PAYMENT_LINK_ERROR: "Houve um problema no geramento do link de pagamento.",
     SUBSCRIPTION_PAYMENT_FAILED: "Houve um problema no pagamento da sua assinatura.",
     SUCCESSFUL_CANCEL_PLAN: "Plano cancelado com sucesso.",
-    SUBSCRIPTION_STRIPE_NOTFOUND: "Assinatura Stripe não encontrada."
+    SUBSCRIPTION_STRIPE_NOTFOUND: "Assinatura Stripe não encontrada.",
+    MAX_TABLES_LENGTH: "Máximo de mesas do plano atingido.",
+    TABLE_NOT_FOUND: "Mesa não encontrada.",
+    BUSY_TABLE_ERROR: "Não é possível excluir a mesa, pois possui um cliente vinculado.",
+    TABLE_HAVE_ORDERS_ERROR: "Não é possível excluir a mesa, pois possui pedidos vinculados.",
+    SUCCESSFUL_DELETE_TABLE: "Mesa deletada com sucesso."
 }

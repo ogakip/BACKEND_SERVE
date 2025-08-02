@@ -2,6 +2,13 @@ import { Column, CreateDateColumn, Entity, JoinColumn, ManyToOne, PrimaryGenerat
 import { Restaurant } from "./restaurants";
 import { Plans } from "./plans";
 
+export enum SubscriptionStatus {
+    PENDING = "pending",
+    ACTIVE = "active",
+    CANCELED = "canceled",
+    NOTPAID = "notpaid"
+}
+
 @Entity()
 export class Restaurant_Subscriptions {
     @PrimaryGeneratedColumn()
@@ -21,8 +28,8 @@ export class Restaurant_Subscriptions {
     @Column({ type: 'timestamp', nullable: true })
     expires_at: Date | null;
 
-    @Column({ default: true })
-    is_active: boolean;
+    @Column({ type: "enum", enum: SubscriptionStatus })
+    status: SubscriptionStatus;
 
     @Column({ type: "varchar", nullable: true })
     payment_link: string | null

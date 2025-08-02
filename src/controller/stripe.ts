@@ -18,7 +18,6 @@ export const stripeWebhook = async (req: Request, res: Response) => {
         const invoice = event.data.object as any;
         try {
             const subscription = await stripe.subscriptions.retrieve(invoice.subscription as string);
-            console.log(subscription)
             const restaurant_id = parseInt(subscription.metadata.restaurant_id);
             await FailedSubscriptionPaymentService(restaurant_id, invoice.id);
             return res.json({ received: true });

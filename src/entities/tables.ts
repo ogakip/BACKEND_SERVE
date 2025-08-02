@@ -1,7 +1,7 @@
 import { Column, Entity, JoinColumn, ManyToOne, PrimaryGeneratedColumn } from "typeorm";
 import { Restaurant } from "./restaurants";
 
-enum TableStatus {
+export enum TableStatus {
     EMPTY = "empty",
     BUSY = "busy"
 }
@@ -12,7 +12,7 @@ export class Restaurant_Tables {
     id: number;
 
     @Column({ type: "varchar", nullable: true })
-    client: string;
+    client: string | null;
 
     @Column({ type: "enum", enum: TableStatus })
     status: TableStatus;
