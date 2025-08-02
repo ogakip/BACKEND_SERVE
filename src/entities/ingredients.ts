@@ -1,6 +1,13 @@
 import { Column, Entity, JoinColumn, ManyToOne, PrimaryGeneratedColumn } from "typeorm";
 import { Restaurant } from "./restaurants";
 
+export enum UnitTypeIngredients {
+    GRAMA = "g",
+    KILOS = "kg",
+    UNIDADES = "un",
+    FATIA = "fatia"
+}
+
 @Entity()
 export class Restaurant_Ingredients {
     @PrimaryGeneratedColumn()
@@ -12,8 +19,11 @@ export class Restaurant_Ingredients {
     @Column({ type: "varchar", nullable: true })
     description: string | null;
 
-    @Column({ type: "varchar" })
-    unit_type: string;
+    @Column({
+        type: "enum",
+        enum: UnitTypeIngredients,
+    })
+    unit_type: UnitTypeIngredients;
 
     @Column({ type: "decimal", precision: 10, scale: 2 })
     unit_value: number;

@@ -70,41 +70,45 @@ export const CreateSubscriptionService = async (restaurant_id: number, plan_id: 
 }
 
 export const ConfirmSubscriptionPaymentService = async (restaurant_id: number, subscription_id: string) => {
-    const subscription = await checkIfSubscriptionsExists(restaurant_id);
-    const plan = await checkIfPlanExists(subscription.plan.id);
+    try {
+        const subscription = await checkIfSubscriptionsExists(restaurant_id);
+        const plan = await checkIfPlanExists(subscription.plan.id);
 
-    const now = new Date();
-    const monthsToAdd = plan.recurrence === 'yearly' ? 12 : 1;
-    const expires_at = addMonths(now, monthsToAdd);
+        const now = new Date();
+        const monthsToAdd = plan.recurrence === 'yearly' ? 12 : 1;
+        const expires_at = addMonths(now, monthsToAdd);
 
-    // Verifica se já existem licenças vinculadas
-    const existingLicenses = await LicensesRepository.find({
-        where: { subscription: { id: subscription.id } }
-    });
+        // Verifica se já existem licenças vinculadas
+        const existingLicenses = await LicensesRepository.find({
+            where: { subscription: { id: subscription.id } }
+        });
 
-    if (existingLicenses.length > 0) {
-        for (const license of existingLicenses) {
-            license.is_active = true;
+        if (existingLicenses.length > 0) {
+            for (const license of existingLicenses) {
+                license.is_active = true;
+            }
+            await LicensesRepository.save(existingLicenses);
+        } else {
+            const licensesToCreate = Array.from({ length: plan.features.num_licenses }).map(() =>
+                LicensesRepository.create({
+                    key: uuidv4(),
+                    subscription,
+                    is_active: true
+                })
+            );
+            await LicensesRepository.save(licensesToCreate);
         }
-        await LicensesRepository.save(existingLicenses);
-    } else {
-        const licensesToCreate = Array.from({ length: plan.features.num_licenses }).map(() =>
-            LicensesRepository.create({
-                key: uuidv4(),
-                subscription,
-                is_active: true
-            })
-        );
-        await LicensesRepository.save(licensesToCreate);
+
+        await SubscriptionsRepository.update(subscription.id, {
+            status: SubscriptionStatus.ACTIVE,
+            stripe_subscription_id: subscription_id,
+            expires_at
+        });
+
+        return { message: messages.SUCCESSFUL_REGISTER };
+    } catch (error) {
+        console.log(error)
     }
-
-    await SubscriptionsRepository.update(subscription.id, {
-        status: SubscriptionStatus.ACTIVE,
-        stripe_subscription_id: subscription_id,
-        expires_at
-    });
-
-    return { message: messages.SUCCESSFUL_REGISTER };
 };
 
 export const FailedSubscriptionPaymentService = async (restaurant_id: number, invoice_id: string) => {

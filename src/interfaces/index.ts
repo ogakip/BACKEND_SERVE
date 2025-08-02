@@ -1,3 +1,4 @@
+import { UnitTypeIngredients } from "../entities/ingredients"
 import { PlanRecurrence, PlanType } from "../entities/plans"
 
 export interface CREATE_RESTAURANT_PROPS {
@@ -70,4 +71,11 @@ export interface EDIT_PLAN_PROPS {
         maxHourlyOrders: number;
     }
     is_active?: boolean
+}
+
+export interface CREATE_INGREDIENT_PROPS {
+    title: string
+    description: string
+    unit_type: UnitTypeIngredients
+    unit_value: number
 }

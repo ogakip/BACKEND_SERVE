@@ -3,6 +3,7 @@ import { CreateRestaurant, EditRestaurant, LoginRestaurant } from "../controller
 import { verifyToken } from "../middlewares/auth";
 import { verifySubscriptionStatus } from "../middlewares/verifySubscriptionStatus";
 import { CreateTable, DeleteTable, EditTable } from "../controller/tables";
+import { CreateIngredient } from "../controller/ingredients";
 
 export const RestaurantRoutes = Router();
 
@@ -13,3 +14,5 @@ RestaurantRoutes.patch('/edit', verifyToken, EditRestaurant)
 RestaurantRoutes.post('/tables', verifyToken, verifySubscriptionStatus, CreateTable)
 RestaurantRoutes.patch('/tables/:table_id', verifyToken, verifySubscriptionStatus, EditTable)
 RestaurantRoutes.delete('/tables/:table_id', verifyToken, verifySubscriptionStatus, DeleteTable)
+
+RestaurantRoutes.post('/ingredient', verifyToken, verifySubscriptionStatus, CreateIngredient)
