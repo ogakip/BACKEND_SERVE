@@ -1,5 +1,5 @@
 import { Request, Response } from "express";
-import { CreateTableService, EditTableService } from "../service/tables";
+import { CreateTableService, DeleteTableService, EditTableService } from "../service/tables";
 
 export const CreateTable = async (req: Request, res: Response) => {
     const { restaurant_id } = res.locals;
@@ -16,4 +16,12 @@ export const EditTable = async (req: Request, res: Response) => {
     const service = await EditTableService(client, Number(table_id));
 
     return res.status(200).json(service);
+}
+
+export const DeleteTable = async (req: Request, res: Response) => {
+    const { table_id } = req.params;
+
+    const service = await DeleteTableService(Number(table_id));
+
+    return res.status(204).send()
 }

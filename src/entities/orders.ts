@@ -3,7 +3,7 @@ import { Restaurant_Recipe } from "./recipe";
 import { Restaurant } from "./restaurants";
 import { Restaurant_Tables } from "./tables";
 
-enum OrderStatus {
+export enum OrderStatus {
     PENDING = "pending",
     PREPARING = "preparing",
     TRANSPORT = "transport",
@@ -15,7 +15,8 @@ export class Restaurant_Order {
     @PrimaryGeneratedColumn()
     id: number;
 
-    @ManyToOne(() => Restaurant_Tables)
+    @ManyToOne(() => Restaurant_Tables, { onDelete: 'CASCADE' })
+    @JoinColumn({ name: 'table_id' })
     table: Restaurant_Tables;
 
     @ManyToOne(() => Restaurant_Recipe)
