@@ -1,7 +1,7 @@
 import { Column, Entity, JoinColumn, ManyToOne, PrimaryGeneratedColumn } from "typeorm";
 import { Restaurant } from "./restaurants";
 
-enum TableStatus {
+export enum TableStatus {
     EMPTY = "empty",
     BUSY = "busy"
 }
