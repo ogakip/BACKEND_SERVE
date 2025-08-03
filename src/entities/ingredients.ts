@@ -1,6 +1,16 @@
 import { Column, Entity, JoinColumn, ManyToOne, PrimaryGeneratedColumn } from "typeorm";
 import { Restaurant } from "./restaurants";
 
+export enum UnitTypeIngredients {
+    GRAMA = "g",
+    KILOS = "kg",
+    UNIDADES = "un",
+    MILILITROS = "ml",
+    MILIGRAMAS = "mg",
+    LITROS = "l",
+    FATIA = "fatia"
+}
+
 @Entity()
 export class Restaurant_Ingredients {
     @PrimaryGeneratedColumn()
@@ -12,10 +22,21 @@ export class Restaurant_Ingredients {
     @Column({ type: "varchar", nullable: true })
     description: string | null;
 
-    @Column({ type: "varchar" })
-    unit_type: string;
+    @Column({
+        type: "enum",
+        enum: UnitTypeIngredients,
+    })
+    unit_type: UnitTypeIngredients;
 
-    @Column({ type: "decimal", precision: 10, scale: 2 })
+    @Column({
+        type: "decimal",
+        precision: 10,
+        scale: 2,
+        transformer: {
+            to: (value: number) => value,
+            from: (value: string) => parseFloat(value),
+        }
+    })
     unit_value: number;
 
     @ManyToOne(() => Restaurant, { nullable: false })

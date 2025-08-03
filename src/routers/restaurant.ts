@@ -3,6 +3,9 @@ import { CreateRestaurant, EditRestaurant, LoginRestaurant } from "../controller
 import { verifyToken } from "../middlewares/auth";
 import { verifySubscriptionStatus } from "../middlewares/verifySubscriptionStatus";
 import { CreateTable, DeleteTable, EditTable } from "../controller/tables";
+import { ChangeIngredient, CreateIngredient, DeleteIngredient, ListIngredients } from "../controller/ingredients";
+import { isTableOwner } from "../middlewares/isTableOwner";
+import { isIngredientOwner } from "../middlewares/isIngredientOwner";
 
 export const RestaurantRoutes = Router();
 
@@ -12,4 +15,9 @@ RestaurantRoutes.patch('/edit', verifyToken, EditRestaurant)
 
 RestaurantRoutes.post('/tables', verifyToken, verifySubscriptionStatus, CreateTable)
 RestaurantRoutes.patch('/tables/:table_id', verifyToken, verifySubscriptionStatus, EditTable)
-RestaurantRoutes.delete('/tables/:table_id', verifyToken, verifySubscriptionStatus, DeleteTable)
+RestaurantRoutes.delete('/tables/:table_id', verifyToken, verifySubscriptionStatus, isTableOwner, DeleteTable)
+
+RestaurantRoutes.post('/ingredient', verifyToken, verifySubscriptionStatus, CreateIngredient)
+RestaurantRoutes.post('/ingredient/:ingredient_id', verifyToken, verifySubscriptionStatus, isIngredientOwner, DeleteIngredient)
+RestaurantRoutes.patch('/ingredient/:ingredient_id', verifyToken, verifySubscriptionStatus, isIngredientOwner, ChangeIngredient)
+RestaurantRoutes.get('/ingredients', verifyToken, verifySubscriptionStatus, ListIngredients)
