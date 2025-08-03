@@ -101,3 +101,10 @@ export interface ADD_INGREDIENT_PROPS {
     recipe_id: number,
     ingredient_id: number
 }
+
+export interface EDIT_RECIPE_PROPS {
+    title?: string
+    description?: string
+    value?: number
+    offer?: number
+}

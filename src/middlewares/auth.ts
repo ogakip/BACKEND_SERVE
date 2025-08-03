@@ -25,6 +25,7 @@ export const verifyToken = (req: Request, res: Response, next: NextFunction) => 
 
         res.locals.restaurant_id = decoded.restaurant_id;
     });
+
     next();
 };
 
