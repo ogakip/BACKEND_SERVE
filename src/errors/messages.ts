@@ -20,5 +20,9 @@ export const messages = {
     TABLE_NOT_FOUND: "Mesa não encontrada.",
     BUSY_TABLE_ERROR: "Não é possível excluir a mesa, pois possui um cliente vinculado.",
     TABLE_HAVE_ORDERS_ERROR: "Não é possível excluir a mesa, pois possui pedidos vinculados.",
-    SUCCESSFUL_DELETE_TABLE: "Mesa deletada com sucesso."
+    SUCCESSFUL_DELETE_TABLE: "Mesa deletada com sucesso.",
+    INGREDIENT_NOT_FOUND: "Ingrediente não encontrado.",
+    INGREDIENT_HAS_RECIPES: "Não é possível remover o ingrediente pois está vinculado a uma receita.",
+    SUCCESSFUL_DELETE_INGREDIENT: "Ingrediente deletado com sucess.",
+    IS_NOT_OWNER: "Este recurso não te pertence."
 }
