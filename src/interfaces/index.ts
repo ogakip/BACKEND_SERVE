@@ -79,3 +79,10 @@ export interface CREATE_INGREDIENT_PROPS {
     unit_type: UnitTypeIngredients
     unit_value: number
 }
+
+export interface EDIT_INGREDIENT_PROPS {
+    title?: string,
+    desciprion?: string,
+    unit_type?: UnitTypeIngredients,
+    unit_value?: number
+}

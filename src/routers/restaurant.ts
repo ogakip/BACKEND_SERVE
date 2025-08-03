@@ -3,7 +3,7 @@ import { CreateRestaurant, EditRestaurant, LoginRestaurant } from "../controller
 import { verifyToken } from "../middlewares/auth";
 import { verifySubscriptionStatus } from "../middlewares/verifySubscriptionStatus";
 import { CreateTable, DeleteTable, EditTable } from "../controller/tables";
-import { CreateIngredient, DeleteIngredient } from "../controller/ingredients";
+import { ChangeIngredient, CreateIngredient, DeleteIngredient } from "../controller/ingredients";
 import { isTableOwner } from "../middlewares/isTableOwner";
 import { isIngredientOwner } from "../middlewares/isIngredientOwner";
 
@@ -19,3 +19,4 @@ RestaurantRoutes.delete('/tables/:table_id', verifyToken, verifySubscriptionStat
 
 RestaurantRoutes.post('/ingredient', verifyToken, verifySubscriptionStatus, CreateIngredient)
 RestaurantRoutes.post('/ingredient/:ingredient_id', verifyToken, verifySubscriptionStatus, isIngredientOwner, DeleteIngredient)
+RestaurantRoutes.patch('/ingredient/:ingredient_id', verifyToken, verifySubscriptionStatus, isIngredientOwner, ChangeIngredient)
