@@ -6,6 +6,7 @@ import { ADD_INGREDIENT_PROPS, CREATE_RECIPE_PROPS } from "../interfaces";
 import { checkIfRestaurantExists } from "../middlewares/findRestaurant";
 import { AppError } from "../errors/appError";
 import { messages } from "../errors/messages";
+import { checkIfSubscriptionsExists } from "../middlewares/findSusbsciprion";
 
 const RecipeIngredientsRepository = AppDataSource.getRepository(Recipe_Ingredients);
 const RecipeRepository = AppDataSource.getRepository(Restaurant_Recipe);
@@ -47,4 +48,21 @@ export const AddToRecipeService = async (quantity: number, recipe_id: number, in
     // await IngredientsRepository.update(findIngredient.id, { unit_value: newStockValue })
 
     return { message: messages.ADD_INGREDIENT_RECIPE }
+}
+
+export const ListRecipeIngredientsService = async (recipe_id: number, restaurant_id: number) => {
+    const findSubscription = await checkIfSubscriptionsExists(restaurant_id);
+    const findRecipe = await RecipeRepository.findOneBy({ id: recipe_id })
+
+    if (!findRecipe) {
+        throw new AppError(messages.RECIPE_NOT_FOUND)
+    }
+
+    const ingredientsList = await RecipeIngredientsRepository.find({ where: { recipe: findRecipe } })
+
+    return {
+        data: ingredientsList,
+        total: ingredientsList.length,
+        max: findSubscription.plan.features.maxRecipes
+    }
 }

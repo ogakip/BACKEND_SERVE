@@ -1,5 +1,5 @@
 import { Request, Response } from "express";
-import { AddToRecipeService, CreateRecipeService } from "../service/recipes";
+import { AddToRecipeService, CreateRecipeService, ListRecipeIngredientsService } from "../service/recipes";
 
 export const CreateRecipe = async (req: Request, res: Response) => {
     const { restaurant_id } = res.locals;
@@ -17,3 +17,12 @@ export const AddToRecipe = async (req: Request, res: Response) => {
 
     return res.status(201).json(response)
 }
+
+export const ListRecipeIngredients = async (req: Request, res: Response) => {
+    const { restaurant_id } = res.locals;
+    const { recipe_id } = req.params;
+
+    const service = await ListRecipeIngredientsService(Number(recipe_id), restaurant_id);
+
+    return res.status(200).json(service);
+}   
