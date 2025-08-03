@@ -5,6 +5,9 @@ export enum UnitTypeIngredients {
     GRAMA = "g",
     KILOS = "kg",
     UNIDADES = "un",
+    MILILITROS = "ml",
+    MILIGRAMAS = "mg",
+    LITROS = "l",
     FATIA = "fatia"
 }
 
@@ -25,7 +28,15 @@ export class Restaurant_Ingredients {
     })
     unit_type: UnitTypeIngredients;
 
-    @Column({ type: "decimal", precision: 10, scale: 2 })
+    @Column({
+        type: "decimal",
+        precision: 10,
+        scale: 2,
+        transformer: {
+            to: (value: number) => value,
+            from: (value: string) => parseFloat(value),
+        }
+    })
     unit_value: number;
 
     @ManyToOne(() => Restaurant, { nullable: false })
