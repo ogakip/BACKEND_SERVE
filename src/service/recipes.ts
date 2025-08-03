@@ -76,11 +76,7 @@ export const EditRecipeService = async (EditRecipeData: EDIT_RECIPE_PROPS, recip
 }
 
 export const RemoveFromRecipeService = async (recipe_ingredient_id: number) => {
-    console.log('to entrando aqui')
-
     const findIngredientRecipe = await RecipeIngredientsRepository.findOneBy({ id: recipe_ingredient_id });
-
-    console.log(findIngredientRecipe)
 
     if (!findIngredientRecipe) {
         throw new AppError(messages.RECIPE_INGREDIENT_NOT_FOUND)
@@ -89,4 +85,16 @@ export const RemoveFromRecipeService = async (recipe_ingredient_id: number) => {
     await RecipeIngredientsRepository.delete(findIngredientRecipe.id);
 
     return { message: messages.SUCCESSFUL_DELETE_RECIPE_INGREDIENT }
+}
+
+export const ListAllRecipesService = async (restaurant_id: number) => {
+    const findRestaurant = await checkIfRestaurantExists(restaurant_id);
+    const findSubscription = await checkIfSubscriptionsExists(restaurant_id);
+    const findAllRecipes = await RecipeRepository.find({ where: { owner: findRestaurant } })
+
+    return {
+        data: findAllRecipes,
+        max: findSubscription.plan.features.maxRecipes,
+        total: findAllRecipes.length
+    }
 }

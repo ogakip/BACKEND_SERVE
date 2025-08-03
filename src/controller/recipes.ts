@@ -1,5 +1,5 @@
 import { Request, Response } from "express";
-import { AddToRecipeService, CreateRecipeService, EditRecipeService, ListRecipeIngredientsService, RemoveFromRecipeService } from "../service/recipes";
+import { AddToRecipeService, CreateRecipeService, EditRecipeService, ListAllRecipesService, ListRecipeIngredientsService, RemoveFromRecipeService } from "../service/recipes";
 
 export const CreateRecipe = async (req: Request, res: Response) => {
     const { restaurant_id } = res.locals;
@@ -41,6 +41,14 @@ export const RemoveFromRecipe = async (req: Request, res: Response) => {
     console.log('to caindo no controller')
 
     const service = await RemoveFromRecipeService(Number(recipe_ingredient_id));
+
+    return res.status(200).json(service);
+}
+
+export const ListAllRecipes = async (req: Request, res: Response) => {
+    const { restaurant_id } = res.locals;
+
+    const service = await ListAllRecipesService(restaurant_id);
 
     return res.status(200).json(service);
 }
