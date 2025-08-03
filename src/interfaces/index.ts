@@ -54,6 +54,8 @@ export interface CREATE_PLAN_PROPS {
         maxTables: number;
         num_licenses: number;
         maxHourlyOrders: number;
+        maxIngredients: number;
+        maxRecipes: number;
     }
     is_active: boolean
 }

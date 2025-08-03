@@ -33,10 +33,13 @@ export class Plans {
 
     @Column({ type: "jsonb", nullable: true })
     features: {
+        num_licenses: number;
         maxEmployees: number;
         maxTables: number;
-        num_licenses: number;
+        maxIngredients: number;
+        maxRecipes: number;
         maxHourlyOrders: number;
+        
     };
 
     @Column({ default: true })

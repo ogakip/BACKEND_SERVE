@@ -1,3 +1,4 @@
+import { checkIfSubscriptionsExists } from './../middlewares/findSusbsciprion';
 import { AppDataSource } from "../database/datasource";
 import { Restaurant_Ingredients } from "../entities/ingredients";
 import { Recipe_Ingredients } from "../entities/recipeIngredients";
@@ -35,10 +36,6 @@ export const CreateIngredientService = async (IngredientData: CREATE_INGREDIENT_
 }
 
 export const ChangeIngredientService = async (EditIngredientData: EDIT_INGREDIENT_PROPS, ingredient_id: number) => {
-    if (EditIngredientData.unit_value) {
-        throw new AppError(messages.UNAUTHORIZED);
-    }
-
     const findIngredient = await IngredientRepository.findOneBy({ id: ingredient_id })
 
     if (!findIngredient) {
@@ -67,4 +64,15 @@ export const DeleteIngredientService = async (ingredient_id: number) => {
     await IngredientRepository.delete(ingredient_id);
 
     return { message: messages.SUCCESSFUL_DELETE_INGREDIENT }
+}
+
+export const ListIngredientsService = async (restaurant_id: number) => {
+    const findIngredients = await IngredientRepository.find()
+    const findSusbsciprion = await checkIfSubscriptionsExists(restaurant_id);
+
+    return {
+        data: findIngredients,
+        total: findIngredients.length,
+        max: findSusbsciprion.plan.features.maxIngredients
+    }
 }

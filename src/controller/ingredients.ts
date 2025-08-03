@@ -1,5 +1,5 @@
 import { Request, Response } from "express";
-import { ChangeIngredientService, CreateIngredientService, DeleteIngredientService } from "../service/ingredients";
+import { ChangeIngredientService, CreateIngredientService, DeleteIngredientService, ListIngredientsService } from "../service/ingredients";
 
 export const CreateIngredient = async (req: Request, res: Response) => {
     const { restaurant_id } = res.locals;
@@ -23,4 +23,12 @@ export const DeleteIngredient = async (req: Request, res: Response) => {
     const service = await DeleteIngredientService(Number(ingredient_id));
 
     return res.status(200).json(service);
+}
+
+export const ListIngredients = async (req: Request, res: Response) => {
+    const { restaurant_id } = res.locals;
+
+    const response = await ListIngredientsService(restaurant_id);
+
+    return res.status(200).json(response)
 }
