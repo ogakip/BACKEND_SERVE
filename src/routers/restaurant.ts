@@ -6,6 +6,8 @@ import { CreateTable, DeleteTable, EditTable } from "../controller/tables";
 import { ChangeIngredient, CreateIngredient, DeleteIngredient, ListIngredients } from "../controller/ingredients";
 import { isTableOwner } from "../middlewares/isTableOwner";
 import { isIngredientOwner } from "../middlewares/isIngredientOwner";
+import { AddToRecipe, CreateRecipe } from "../controller/recipes";
+import { isRecipeOwner } from "../middlewares/isRecipeOwner";
 
 export const RestaurantRoutes = Router();
 
@@ -21,3 +23,6 @@ RestaurantRoutes.post('/ingredient', verifyToken, verifySubscriptionStatus, Crea
 RestaurantRoutes.post('/ingredient/:ingredient_id', verifyToken, verifySubscriptionStatus, isIngredientOwner, DeleteIngredient)
 RestaurantRoutes.patch('/ingredient/:ingredient_id', verifyToken, verifySubscriptionStatus, isIngredientOwner, ChangeIngredient)
 RestaurantRoutes.get('/ingredients', verifyToken, verifySubscriptionStatus, ListIngredients)
+
+RestaurantRoutes.post('/recipe', verifyToken, verifySubscriptionStatus, CreateRecipe)
+RestaurantRoutes.post('/recipe/:recipe_id/:ingredient_id', verifyToken, verifySubscriptionStatus, isRecipeOwner, isIngredientOwner, AddToRecipe)

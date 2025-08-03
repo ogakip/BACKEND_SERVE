@@ -88,3 +88,16 @@ export interface EDIT_INGREDIENT_PROPS {
     unit_type?: UnitTypeIngredients,
     unit_value?: number
 }
+
+export interface CREATE_RECIPE_PROPS {
+    title: string
+    description: string
+    value: number
+    offer?: number
+}
+
+export interface ADD_INGREDIENT_PROPS {
+    quantity: number,
+    recipe_id: number,
+    ingredient_id: number
+}

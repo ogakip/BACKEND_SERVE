@@ -24,5 +24,7 @@ export const messages = {
     INGREDIENT_NOT_FOUND: "Ingrediente não encontrado.",
     INGREDIENT_HAS_RECIPES: "Não é possível remover o ingrediente pois está vinculado a uma receita.",
     SUCCESSFUL_DELETE_INGREDIENT: "Ingrediente deletado com sucess.",
-    IS_NOT_OWNER: "Este recurso não te pertence."
+    IS_NOT_OWNER: "Este recurso não te pertence.",
+    RECIPE_NOT_FOUND: "Receita não encontrada.",
+    ADD_INGREDIENT_RECIPE: "Ingrediente adicionado com sucesso."
 }
