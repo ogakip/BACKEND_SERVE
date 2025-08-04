@@ -7,7 +7,8 @@ export enum OrderStatus {
     PENDING = "pending",
     PREPARING = "preparing",
     TRANSPORT = "transport",
-    DONE = "done"
+    DONE = "done",
+    CANCELED = "canceled"
 }
 
 export enum OrderType {

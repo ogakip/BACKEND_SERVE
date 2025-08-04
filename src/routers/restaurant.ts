@@ -8,7 +8,8 @@ import { isTableOwner } from "../middlewares/isTableOwner";
 import { isIngredientOwner } from "../middlewares/isIngredientOwner";
 import { AddToRecipe, CreateRecipe, EditRecipe, ListAllRecipes, ListRecipeIngredients, RemoveFromRecipe } from "../controller/recipes";
 import { isRecipeOwner } from "../middlewares/isRecipeOwner";
-import { CreateOrder } from "../controller/orders";
+import { ChangeOrderStatus, CreateOrder, ListAllOrders } from "../controller/orders";
+import { isOrderOwner } from "../middlewares/isOrderOwner";
 
 export const RestaurantRoutes = Router();
 
@@ -33,4 +34,6 @@ RestaurantRoutes.get('/recipe/ingredients/:recipe_id', verifyToken, verifySubscr
 RestaurantRoutes.patch('/recipe/:recipe_id', verifyToken, verifySubscriptionStatus, isRecipeOwner, EditRecipe)
 RestaurantRoutes.post('/recipe/:recipe_id/recipe_ingredients/:recipe_ingredient_id', verifyToken, verifySubscriptionStatus, isRecipeOwner, RemoveFromRecipe)
 
+RestaurantRoutes.get('/order', verifyToken, verifySubscriptionStatus, ListAllOrders)
 RestaurantRoutes.post('/order', verifyToken, verifySubscriptionStatus, CreateOrder)
+RestaurantRoutes.patch('/order/:order_id', verifyToken, verifySubscriptionStatus, isOrderOwner, ChangeOrderStatus)

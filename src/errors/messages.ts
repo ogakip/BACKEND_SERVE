@@ -32,5 +32,6 @@ export const messages = {
     LICENSE_NOT_FOUND: "Licença de filial não encontrada, verifique e tente novamente.",
     LICENSE_BUSY: "Licença em uso, por favor tente novamente.",
     ERROR_TYPE_PLAN: "Tipo de plano não habilita mudança de tipo.",
-    ORDER_TYPE_EMPTY: "Tipo de pedido obrigatório nesta modalidade."
+    ORDER_TYPE_EMPTY: "Tipo de pedido obrigatório nesta modalidade.",
+    ORDER_NOT_FOUND: "Pedido não encontrado."
 }
