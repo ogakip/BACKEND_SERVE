@@ -67,7 +67,8 @@ export const DeleteIngredientService = async (ingredient_id: number) => {
 }
 
 export const ListIngredientsService = async (restaurant_id: number) => {
-    const findIngredients = await IngredientRepository.find()
+    const findRestaurant = await checkIfRestaurantExists(restaurant_id);
+    const findIngredients = await IngredientRepository.find({ where: { owner: findRestaurant } })
     const findSusbsciprion = await checkIfSubscriptionsExists(restaurant_id);
 
     return {
