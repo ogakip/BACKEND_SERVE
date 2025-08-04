@@ -10,10 +10,12 @@ import { AddToRecipe, CreateRecipe, EditRecipe, ListAllRecipes, ListRecipeIngred
 import { isRecipeOwner } from "../middlewares/isRecipeOwner";
 import { ChangeOrderStatus, CreateOrder, ListAllOrders } from "../controller/orders";
 import { isOrderOwner } from "../middlewares/isOrderOwner";
+import { schemaValidation } from "../middlewares/yupValidator";
+import { CreateRestaurantSchema } from "../validations/restaurant";
 
 export const RestaurantRoutes = Router();
 
-RestaurantRoutes.post('/register', CreateRestaurant);
+RestaurantRoutes.post('/register', schemaValidation(CreateRestaurantSchema), CreateRestaurant);
 RestaurantRoutes.post('/login', LoginRestaurant);
 RestaurantRoutes.patch('/edit', verifyToken, EditRestaurant)
 

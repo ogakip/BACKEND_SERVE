@@ -3,7 +3,7 @@ import { CreateRestaurantService, EditRestaurantService, LoginRestaurantService 
 
 export const CreateRestaurant = async (req: Request, res: Response) => {
     const service = await CreateRestaurantService(req.body);
-
+    
     return res.status(201).json(service);
 }
 

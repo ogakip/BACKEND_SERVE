@@ -1,5 +1,5 @@
 import { AppDataSource } from "../database/datasource";
-import { Restaurant } from "../entities/restaurants";
+import { Restaurant, RestaurantType } from "../entities/restaurants";
 import { AppError } from "../errors/appError";
 import { compare, hash } from "bcrypt";
 import jwt from "jsonwebtoken";
@@ -74,8 +74,13 @@ export const CreateRestaurantService = async (RestaurantData: CREATE_RESTAURANT_
             throw new AppError(messages.LICENSE_BUSY)
         }
 
-        await RestaurantRepository.save(newRestaurant);
-        await LicensesRepository.update(findLicense.id, { owner: newRestaurant })
+        
+        const savedRestaurant = await RestaurantRepository.save({
+            ...newRestaurant,
+            branch_code: RestaurantData.branch_code,
+            type: RestaurantType.FILIAL
+        });
+        await LicensesRepository.update(findLicense.id, { owner: savedRestaurant })
     } else {
         await RestaurantRepository.save(newRestaurant);
     }

@@ -10,7 +10,9 @@ import { v4 as uuidv4 } from "uuid";
 import { stripe } from "../lib/stripe";
 import { AppError } from "../errors/appError";
 import { addMonths } from 'date-fns';
+import { Restaurant, RestaurantType } from "../entities/restaurants";
 
+const RestaurantRepository = AppDataSource.getRepository(Restaurant)
 const PlansRepository = AppDataSource.getRepository(Plans)
 const LicensesRepository = AppDataSource.getRepository(Subscriptions_Licenses)
 const SubscriptionsRepository = AppDataSource.getRepository(Restaurant_Subscriptions)
@@ -104,6 +106,7 @@ export const ConfirmSubscriptionPaymentService = async (restaurant_id: number, s
             stripe_subscription_id: subscription_id,
             expires_at
         });
+        await RestaurantRepository.update(restaurant_id, { type: RestaurantType.MATRIZ })
 
         return { message: messages.SUCCESSFUL_REGISTER };
     } catch (error) {
