@@ -28,6 +28,7 @@ export class Restaurant_Order {
     type: OrderType;
 
     @ManyToOne(() => Restaurant_Recipe)
+    @JoinColumn({ name: 'recipe_id' })
     recipe: Restaurant_Recipe;
 
     @Column({ type: "enum", enum: OrderStatus })

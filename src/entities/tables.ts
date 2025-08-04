@@ -11,6 +11,9 @@ export class Restaurant_Tables {
     @PrimaryGeneratedColumn()
     id: number;
 
+    @Column({ type: "varchar" })
+    title: string;
+
     @Column({ type: "varchar", nullable: true })
     client: string | null;
 
