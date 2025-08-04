@@ -11,13 +11,13 @@ import { isRecipeOwner } from "../middlewares/isRecipeOwner";
 import { ChangeOrderStatus, CreateOrder, ListAllOrders } from "../controller/orders";
 import { isOrderOwner } from "../middlewares/isOrderOwner";
 import { schemaValidation } from "../middlewares/yupValidator";
-import { CreateRestaurantSchema } from "../validations/restaurant";
+import { CreateRestaurantSchema, EditRestaurantSchema } from "../validations/restaurant";
 
 export const RestaurantRoutes = Router();
 
 RestaurantRoutes.post('/register', schemaValidation(CreateRestaurantSchema), CreateRestaurant);
 RestaurantRoutes.post('/login', LoginRestaurant);
-RestaurantRoutes.patch('/edit', verifyToken, EditRestaurant)
+RestaurantRoutes.patch('/edit', verifyToken, schemaValidation(EditRestaurantSchema), EditRestaurant)
 
 RestaurantRoutes.post('/tables', verifyToken, verifySubscriptionStatus, CreateTable)
 RestaurantRoutes.get('/tables', verifyToken, verifySubscriptionStatus, ListAllTables)

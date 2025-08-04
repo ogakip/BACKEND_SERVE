@@ -20,7 +20,7 @@ export const CreateRestaurantSchema = yup.object({
     phone: yup.string()
         .nullable()
         .matches(/^55\d{10,11}$/
-            , "Telefone inválido")
+            , "Telefone inválido. Use o formato DDI + DDD + número, ex: 5544000000000")
         .transform((value, originalValue) => originalValue === "" ? null : value),
 
     type: yup.mixed<"matriz" | "filial" | "none">()
@@ -41,4 +41,27 @@ export const CreateRestaurantSchema = yup.object({
     city: yup.string().nullable(),
     state: yup.string().nullable(),
     zip_code: yup.string().nullable()
-});
+}).noUnknown();
+
+export const EditRestaurantSchema = yup.object({
+  fullname: yup.string()
+    .min(3, "Nome deve ter pelo menos 3 caracteres")
+    .notRequired(),
+
+  password: yup.string()
+    .min(6, "Senha deve ter no mínimo 6 caracteres")
+    .notRequired(),
+
+  phone: yup.string()
+    .nullable()
+    .matches(/^55\d{10,11}$/, "Telefone inválido. Use o formato DDI + DDD + número, ex: 5544000000000")
+    .transform((value, originalValue) => originalValue === "" ? null : value)
+    .notRequired(),
+
+  street: yup.string().notRequired(),
+  number: yup.string().notRequired(),
+  district: yup.string().notRequired(),
+  city: yup.string().notRequired(),
+  state: yup.string().notRequired(),
+  zip_code: yup.string().notRequired()
+}).noUnknown();

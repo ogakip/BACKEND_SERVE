@@ -146,6 +146,10 @@ export const EditRestaurantService = async (restaurant_id: number, EditRestauran
 
     const updateData = buildUpdateObject(EditRestaurantData)
 
+    if (updateData.password) {
+        updateData.password = await hash(updateData.password, 10)
+    }
+
     await RestaurantRepository.update(restaurant_id, updateData)
 
     return { message: messages.SUCCESSFUL_EDIT }
