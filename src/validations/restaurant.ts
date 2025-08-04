@@ -65,3 +65,21 @@ export const EditRestaurantSchema = yup.object({
   state: yup.string().notRequired(),
   zip_code: yup.string().notRequired()
 }).noUnknown();
+
+export const LoginRestaurantSchema = yup.object({
+  email: yup.string()
+    .email("E-mail inválido")
+    .notRequired(),
+
+  username: yup.string()
+    .notRequired(),
+
+  password: yup.string()
+    .required("Senha é obrigatória")
+    .min(6, "Senha deve ter no mínimo 6 caracteres")
+}).test("email-or-username", "Informe o e-mail ou o nome de usuário", function (value) {
+  if (!value?.email && !value?.username) {
+    return this.createError({ message: "Você deve informar e-mail ou nome de usuário" });
+  }
+  return true;
+});
