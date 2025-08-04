@@ -7,7 +7,13 @@ export enum OrderStatus {
     PENDING = "pending",
     PREPARING = "preparing",
     TRANSPORT = "transport",
-    DONE = "done"
+    DONE = "done",
+    CANCELED = "canceled"
+}
+
+export enum OrderType {
+    LOCAL = "local",
+    DELIVERY = "delivery"
 }
 
 @Entity()
@@ -15,11 +21,15 @@ export class Restaurant_Order {
     @PrimaryGeneratedColumn()
     id: number;
 
-    @ManyToOne(() => Restaurant_Tables, { onDelete: 'CASCADE' })
+    @ManyToOne(() => Restaurant_Tables, { onDelete: 'CASCADE', nullable: true })
     @JoinColumn({ name: 'table_id' })
-    table: Restaurant_Tables;
+    table: Restaurant_Tables | null;
+
+    @Column({ type: "enum", enum: OrderType })
+    type: OrderType;
 
     @ManyToOne(() => Restaurant_Recipe)
+    @JoinColumn({ name: 'recipe_id' })
     recipe: Restaurant_Recipe;
 
     @Column({ type: "enum", enum: OrderStatus })

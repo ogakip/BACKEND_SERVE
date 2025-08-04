@@ -12,7 +12,7 @@ import { In } from "typeorm";
 const getTablesRepository = AppDataSource.getRepository(Restaurant_Tables);
 const getOrderRepository = AppDataSource.getRepository(Restaurant_Order);
 
-export const CreateTableService = async (restaurant_id: number) => {
+export const CreateTableService = async (title: string, restaurant_id: number) => {
     const findRestaurant = await checkIfRestaurantExists(restaurant_id);
     const findSubscriptions = await checkIfSubscriptionsExists(restaurant_id);
 
@@ -28,7 +28,8 @@ export const CreateTableService = async (restaurant_id: number) => {
 
     const newTable = getTablesRepository.create({
         owner: findRestaurant,
-        status: TableStatus.EMPTY
+        status: TableStatus.EMPTY,
+        title
     })
 
     await getTablesRepository.save(newTable);
@@ -64,4 +65,16 @@ export const DeleteTableService = async (table_id: number) => {
     await getTablesRepository.delete(table_id);
 
     return { message: messages.SUCCESSFUL_DELETE_TABLE }
+}
+
+export const ListAllTablesService = async (restaurant_id: number) => {
+    const findRestaurant = await checkIfRestaurantExists(restaurant_id);
+    const findTables = await getTablesRepository.find({ where: { owner: findRestaurant } });
+    const findSubscription = await checkIfSubscriptionsExists(restaurant_id);
+
+    return {
+        data: findTables,
+        max: findSubscription.plan.features.maxTables,
+        total: findTables.length
+    }
 }

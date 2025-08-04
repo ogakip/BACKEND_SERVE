@@ -64,7 +64,7 @@ export const ListRecipeIngredientsService = async (recipe_id: number, restaurant
 }
 
 export const EditRecipeService = async (EditRecipeData: EDIT_RECIPE_PROPS, recipe_id: number) => {
-    const findRecipe = await RecipeRepository.findOneBy({ id: recipe_id })
+    const findRecipe = await RecipeRepository.findOneBy({ id: recipe_id });
 
     if (!findRecipe) {
         throw new AppError(messages.RECIPE_NOT_FOUND)

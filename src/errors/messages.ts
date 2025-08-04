@@ -28,5 +28,10 @@ export const messages = {
     RECIPE_NOT_FOUND: "Receita não encontrada.",
     ADD_INGREDIENT_RECIPE: "Ingrediente adicionado com sucesso.",
     RECIPE_INGREDIENT_NOT_FOUND: "Ingrediente da receita não encontrado.",
-    SUCCESSFUL_DELETE_RECIPE_INGREDIENT: "Ingrediente removido com sucesso."
+    SUCCESSFUL_DELETE_RECIPE_INGREDIENT: "Ingrediente removido com sucesso.",
+    LICENSE_NOT_FOUND: "Licença de filial não encontrada, verifique e tente novamente.",
+    LICENSE_BUSY: "Licença em uso, por favor tente novamente.",
+    ERROR_TYPE_PLAN: "Tipo de plano não habilita mudança de tipo.",
+    ORDER_TYPE_EMPTY: "Tipo de pedido obrigatório nesta modalidade.",
+    ORDER_NOT_FOUND: "Pedido não encontrado."
 }

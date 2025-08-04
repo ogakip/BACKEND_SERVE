@@ -1,4 +1,5 @@
 import { UnitTypeIngredients } from "../entities/ingredients"
+import { OrderType } from "../entities/orders"
 import { PlanRecurrence, PlanType } from "../entities/plans"
 
 export interface CREATE_RESTAURANT_PROPS {
@@ -13,6 +14,7 @@ export interface CREATE_RESTAURANT_PROPS {
     city: string
     state: string
     zip_code: string
+    branch_code?: string
 }
 
 export interface LOGIN_RESTAURANT_PROPS {
@@ -107,4 +109,10 @@ export interface EDIT_RECIPE_PROPS {
     description?: string
     value?: number
     offer?: number
+}
+
+export interface CREATE_ORDER_PROPS {
+    table_id?: number
+    recipe_id: number
+    type?: OrderType
 }

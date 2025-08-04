@@ -2,12 +2,14 @@ import { Router } from "express";
 import { CreateRestaurant, EditRestaurant, LoginRestaurant } from "../controller/restaurant";
 import { verifyToken } from "../middlewares/auth";
 import { verifySubscriptionStatus } from "../middlewares/verifySubscriptionStatus";
-import { CreateTable, DeleteTable, EditTable } from "../controller/tables";
+import { CreateTable, DeleteTable, EditTable, ListAllTables } from "../controller/tables";
 import { ChangeIngredient, CreateIngredient, DeleteIngredient, ListIngredients } from "../controller/ingredients";
 import { isTableOwner } from "../middlewares/isTableOwner";
 import { isIngredientOwner } from "../middlewares/isIngredientOwner";
 import { AddToRecipe, CreateRecipe, EditRecipe, ListAllRecipes, ListRecipeIngredients, RemoveFromRecipe } from "../controller/recipes";
 import { isRecipeOwner } from "../middlewares/isRecipeOwner";
+import { ChangeOrderStatus, CreateOrder, ListAllOrders } from "../controller/orders";
+import { isOrderOwner } from "../middlewares/isOrderOwner";
 
 export const RestaurantRoutes = Router();
 
@@ -16,6 +18,7 @@ RestaurantRoutes.post('/login', LoginRestaurant);
 RestaurantRoutes.patch('/edit', verifyToken, EditRestaurant)
 
 RestaurantRoutes.post('/tables', verifyToken, verifySubscriptionStatus, CreateTable)
+RestaurantRoutes.get('/tables', verifyToken, verifySubscriptionStatus, ListAllTables)
 RestaurantRoutes.patch('/tables/:table_id', verifyToken, verifySubscriptionStatus, EditTable)
 RestaurantRoutes.delete('/tables/:table_id', verifyToken, verifySubscriptionStatus, isTableOwner, DeleteTable)
 
@@ -30,3 +33,7 @@ RestaurantRoutes.post('/recipe/:recipe_id/:ingredient_id', verifyToken, verifySu
 RestaurantRoutes.get('/recipe/ingredients/:recipe_id', verifyToken, verifySubscriptionStatus, isRecipeOwner, ListRecipeIngredients)
 RestaurantRoutes.patch('/recipe/:recipe_id', verifyToken, verifySubscriptionStatus, isRecipeOwner, EditRecipe)
 RestaurantRoutes.post('/recipe/:recipe_id/recipe_ingredients/:recipe_ingredient_id', verifyToken, verifySubscriptionStatus, isRecipeOwner, RemoveFromRecipe)
+
+RestaurantRoutes.get('/order', verifyToken, verifySubscriptionStatus, ListAllOrders)
+RestaurantRoutes.post('/order', verifyToken, verifySubscriptionStatus, CreateOrder)
+RestaurantRoutes.patch('/order/:order_id', verifyToken, verifySubscriptionStatus, isOrderOwner, ChangeOrderStatus)
