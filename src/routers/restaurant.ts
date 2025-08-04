@@ -2,7 +2,7 @@ import { Router } from "express";
 import { CreateRestaurant, EditRestaurant, LoginRestaurant } from "../controller/restaurant";
 import { verifyToken } from "../middlewares/auth";
 import { verifySubscriptionStatus } from "../middlewares/verifySubscriptionStatus";
-import { CreateTable, DeleteTable, EditTable } from "../controller/tables";
+import { CreateTable, DeleteTable, EditTable, ListAllTables } from "../controller/tables";
 import { ChangeIngredient, CreateIngredient, DeleteIngredient, ListIngredients } from "../controller/ingredients";
 import { isTableOwner } from "../middlewares/isTableOwner";
 import { isIngredientOwner } from "../middlewares/isIngredientOwner";
@@ -16,6 +16,7 @@ RestaurantRoutes.post('/login', LoginRestaurant);
 RestaurantRoutes.patch('/edit', verifyToken, EditRestaurant)
 
 RestaurantRoutes.post('/tables', verifyToken, verifySubscriptionStatus, CreateTable)
+RestaurantRoutes.get('/tables', verifyToken, verifySubscriptionStatus, ListAllTables)
 RestaurantRoutes.patch('/tables/:table_id', verifyToken, verifySubscriptionStatus, EditTable)
 RestaurantRoutes.delete('/tables/:table_id', verifyToken, verifySubscriptionStatus, isTableOwner, DeleteTable)
 

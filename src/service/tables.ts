@@ -65,3 +65,15 @@ export const DeleteTableService = async (table_id: number) => {
 
     return { message: messages.SUCCESSFUL_DELETE_TABLE }
 }
+
+export const ListAllTablesService = async (restaurant_id: number) => {
+    const findRestaurant = await checkIfRestaurantExists(restaurant_id);
+    const findTables = await getTablesRepository.find({ where: { owner: findRestaurant } });
+    const findSubscription = await checkIfSubscriptionsExists(restaurant_id);
+
+    return {
+        data: findTables,
+        max: findSubscription.plan.features.maxTables,
+        total: findTables.length
+    }
+}
