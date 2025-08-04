@@ -10,14 +10,22 @@ export enum OrderStatus {
     DONE = "done"
 }
 
+export enum OrderType {
+    LOCAL = "local",
+    DELIVERY = "delivery"
+}
+
 @Entity()
 export class Restaurant_Order {
     @PrimaryGeneratedColumn()
     id: number;
 
-    @ManyToOne(() => Restaurant_Tables, { onDelete: 'CASCADE' })
+    @ManyToOne(() => Restaurant_Tables, { onDelete: 'CASCADE', nullable: true })
     @JoinColumn({ name: 'table_id' })
-    table: Restaurant_Tables;
+    table: Restaurant_Tables | null;
+
+    @Column({ type: "enum", enum: OrderType })
+    type: OrderType;
 
     @ManyToOne(() => Restaurant_Recipe)
     recipe: Restaurant_Recipe;

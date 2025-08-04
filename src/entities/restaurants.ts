@@ -1,5 +1,11 @@
 import { Column, Entity, PrimaryGeneratedColumn } from "typeorm";
 
+export enum RestaurantType {
+  NONE = "none",
+  FILIAL = "filial",
+  MATRIZ = "matriz"
+}
+
 @Entity()
 export class Restaurant {
   @PrimaryGeneratedColumn()
@@ -17,8 +23,11 @@ export class Restaurant {
   @Column({ type: "varchar" })
   password: string;
 
-  @Column({ default: false })
-  is_master: boolean;
+  @Column({ type: "enum", enum: RestaurantType, nullable: true })
+  type: RestaurantType | null;
+
+  @Column({ type: "varchar", nullable: true })
+  branch_code: string;
 
   @Column({ type: "varchar", nullable: true })
   phone: string;

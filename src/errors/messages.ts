@@ -28,5 +28,7 @@ export const messages = {
     RECIPE_NOT_FOUND: "Receita não encontrada.",
     ADD_INGREDIENT_RECIPE: "Ingrediente adicionado com sucesso.",
     RECIPE_INGREDIENT_NOT_FOUND: "Ingrediente da receita não encontrado.",
-    SUCCESSFUL_DELETE_RECIPE_INGREDIENT: "Ingrediente removido com sucesso."
+    SUCCESSFUL_DELETE_RECIPE_INGREDIENT: "Ingrediente removido com sucesso.",
+    LICENSE_NOT_FOUND: "Licença de filial não encontrada, verifique e tente novamente.",
+    LICENSE_BUSY: "Licença em uso, por favor tente novamente."
 }

@@ -8,8 +8,10 @@ import jwt from "jsonwebtoken";
 import { CREATE_RESTAURANT_PROPS, EDIT_RESTAURANT_PROPS, LOGIN_RESTAURANT_PROPS } from "../interfaces";
 import { messages } from "../errors/messages";
 import { stripe } from "../lib/stripe";
+import { Subscriptions_Licenses } from "../entities/licenses";
 
 const RestaurantRepository = AppDataSource.getRepository(Restaurant);
+const LicensesRepository = AppDataSource.getRepository(Subscriptions_Licenses);
 
 export const buildUpdateObject = (body: EDIT_RESTAURANT_PROPS) => {
     return Object.entries(body).reduce((acc, [key, value]) => {
@@ -29,7 +31,7 @@ export const CreateRestaurantService = async (RestaurantData: CREATE_RESTAURANT_
             { username }
         ]
     });
-    
+
     if (existingRestaurant) {
         throw new AppError(messages.REGISTER_ALREADY_EXISTS)
     }
@@ -61,7 +63,23 @@ export const CreateRestaurantService = async (RestaurantData: CREATE_RESTAURANT_
         stripe_customer_id: customer.id
     });
 
-    await RestaurantRepository.save(newRestaurant);
+    if (RestaurantData.branch_code) {
+        const findLicense = await LicensesRepository.findOneBy({ key: RestaurantData.branch_code })
+
+        if (!findLicense) {
+            throw new AppError(messages.LICENSE_NOT_FOUND)
+        }
+
+        if (findLicense.owner) {
+            throw new AppError(messages.LICENSE_BUSY)
+        }
+
+        await RestaurantRepository.save(newRestaurant);
+        await LicensesRepository.update(findLicense.id, { owner: newRestaurant })
+    } else {
+        await RestaurantRepository.save(newRestaurant);
+    }
+
 
     try {
         await stripe.customers.update(customer.id, {

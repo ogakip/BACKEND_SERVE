@@ -13,6 +13,7 @@ export interface CREATE_RESTAURANT_PROPS {
     city: string
     state: string
     zip_code: string
+    branch_code?: string
 }
 
 export interface LOGIN_RESTAURANT_PROPS {
@@ -107,4 +108,8 @@ export interface EDIT_RECIPE_PROPS {
     description?: string
     value?: number
     offer?: number
+}
+
+export interface CREATE_ORDER_PROPS {
+
 }
