@@ -12,6 +12,8 @@ import { ChangeOrderStatus, CreateOrder, ListAllOrders } from "../controller/ord
 import { isOrderOwner } from "../middlewares/isOrderOwner";
 import { schemaValidation } from "../middlewares/yupValidator";
 import { CreateRestaurantSchema, EditRestaurantSchema, LoginRestaurantSchema } from "../validations/restaurant";
+import { CreateTableSchema, SetClientSchema } from "../validations/table";
+import { CreateIngredientSchema } from "../validations/ingredient";
 
 export const RestaurantRoutes = Router();
 
@@ -19,12 +21,12 @@ RestaurantRoutes.post('/register', schemaValidation(CreateRestaurantSchema), Cre
 RestaurantRoutes.post('/login', schemaValidation(LoginRestaurantSchema),LoginRestaurant);
 RestaurantRoutes.patch('/edit', verifyToken, schemaValidation(EditRestaurantSchema), EditRestaurant)
 
-RestaurantRoutes.post('/tables', verifyToken, verifySubscriptionStatus, CreateTable)
+RestaurantRoutes.post('/tables', verifyToken, schemaValidation(CreateTableSchema),verifySubscriptionStatus, CreateTable)
 RestaurantRoutes.get('/tables', verifyToken, verifySubscriptionStatus, ListAllTables)
-RestaurantRoutes.patch('/tables/:table_id', verifyToken, verifySubscriptionStatus, EditTable)
+RestaurantRoutes.patch('/tables/:table_id', verifyToken, schemaValidation(SetClientSchema),verifySubscriptionStatus, EditTable)
 RestaurantRoutes.delete('/tables/:table_id', verifyToken, verifySubscriptionStatus, isTableOwner, DeleteTable)
 
-RestaurantRoutes.post('/ingredient', verifyToken, verifySubscriptionStatus, CreateIngredient)
+RestaurantRoutes.post('/ingredient', verifyToken, schemaValidation(CreateIngredientSchema),verifySubscriptionStatus, CreateIngredient)
 RestaurantRoutes.post('/ingredient/:ingredient_id', verifyToken, verifySubscriptionStatus, isIngredientOwner, DeleteIngredient)
 RestaurantRoutes.patch('/ingredient/:ingredient_id', verifyToken, verifySubscriptionStatus, isIngredientOwner, ChangeIngredient)
 RestaurantRoutes.get('/ingredients', verifyToken, verifySubscriptionStatus, ListIngredients)
