@@ -82,4 +82,4 @@ export const LoginRestaurantSchema = yup.object({
     return this.createError({ message: "Você deve informar e-mail ou nome de usuário" });
   }
   return true;
-});
+}).noUnknown();
