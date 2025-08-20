@@ -16,24 +16,25 @@ export const CreateTableService = async (title: string, restaurant_id: number) =
     const findRestaurant = await checkIfRestaurantExists(restaurant_id);
     const findSubscriptions = await checkIfSubscriptionsExists(restaurant_id);
 
+    
     if (!findSubscriptions) {
         throw new AppError(messages.SUBSCRIPTION_NOT_FOUND);
     }
-
+    
     const countTables = await getTablesRepository.find({ where: { owner: findRestaurant } })
-
+    
     if (countTables.length === findSubscriptions.plan.features.maxTables) {
         throw new AppError(messages.MAX_TABLES_LENGTH);
     }
-
+    
     const newTable = getTablesRepository.create({
         owner: findRestaurant,
         status: TableStatus.EMPTY,
         title
     })
-
-    await getTablesRepository.save(newTable);
-
+    
+    await getTablesRepository.save(newTable)
+    
     return { message: messages.SUCCESSFUL_REGISTER }
 }
 

@@ -38,8 +38,6 @@ export const EditRecipe = async (req: Request, res: Response) => {
 export const RemoveFromRecipe = async (req: Request, res: Response) => {
     const { recipe_ingredient_id } = req.params;
 
-    console.log('to caindo no controller')
-
     const service = await RemoveFromRecipeService(Number(recipe_ingredient_id));
 
     return res.status(200).json(service);
