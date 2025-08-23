@@ -43,6 +43,7 @@ export const CreateRestaurantService = async (RestaurantData: CREATE_RESTAURANT_
             email,
             name: fullname
         });
+        console.log(customer)
     } catch (error) {
         console.error('Erro ao criar customer na Stripe:', error);
         throw new AppError('Falha ao registrar cliente na plataforma de pagamentos. Tente novamente mais tarde.');

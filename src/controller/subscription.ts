@@ -1,4 +1,4 @@
-import { CancelSubscriptionService } from './../service/subscription';
+import { CancelSubscriptionService, GetUserSubscriptionService } from './../service/subscription';
 import { Request, Response } from "express";
 import { CreateSubscriptionService, ListAllPlansService } from "../service/subscription";
 
@@ -22,5 +22,13 @@ export const CancelSubscription = async (req: Request, res: Response) => {
 
     const response = await CancelSubscriptionService(restaurant_id);
     
+    return res.status(200).json(response)
+}
+
+export const GetUserSubscription = async (req: Request, res: Response) => {
+    const { restaurant_id } = res.locals;
+    
+    const response = await GetUserSubscriptionService(restaurant_id);
+
     return res.status(200).json(response)
 }
