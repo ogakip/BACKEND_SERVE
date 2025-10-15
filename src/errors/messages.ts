@@ -33,5 +33,8 @@ export const messages = {
     LICENSE_BUSY: "Licença em uso, por favor tente novamente.",
     ERROR_TYPE_PLAN: "Tipo de plano não habilita mudança de tipo.",
     ORDER_TYPE_EMPTY: "Tipo de pedido obrigatório nesta modalidade.",
-    ORDER_NOT_FOUND: "Pedido não encontrado."
+    ORDER_NOT_FOUND: "Pedido não encontrado.",
+    INVALID_SESSION: "Sessão inválida ou expirada.",
+    SESSION_TOKEN_NOT_FOUND: "Token de sessão não encontrado.",
+    UNAUTHORIZED_SESSION: "Sessão não autorizada.",
 }
