@@ -21,9 +21,11 @@ export const checkIfSubscriptionsExists = async (restaurant_id: number) => {
                 SubscriptionStatus.NOTPAID
             ])
         },
-        relations: ['plan'],
+        relations: ['plan', 'owner'],
         order: { created_at: 'DESC' },
     });
+
+    console.log(subscription)
 
     if (subscription) {
         return subscription;
