@@ -31,7 +31,7 @@ export const ListAllPlansService = async () => {
 export const GetUserSubscriptionService = async (restaurant_id: number) => {
   const subscription = await checkIfSubscriptionsExists(restaurant_id);
 
-  return subscription
+  return subscription;
 };
 
 export const CreateSubscriptionService = async (
@@ -61,8 +61,8 @@ export const CreateSubscriptionService = async (
         },
       ],
       customer: findRestaurant.stripe_customer_id,
-      success_url: "https://www.google.com/",
-      cancel_url: "https://www.google.com/#",
+      success_url: `${process.env.FRONTEND_URL}${process.env.FRONTEND_SUBSCRIPTION_STATUS_PAGE}`,
+      cancel_url: `${process.env.FRONTEND_URL}${process.env.FRONTEND_SUBSCRIPTION_STATUS_PAGE}`,
       subscription_data: {
         metadata: {
           restaurant_id: `${findRestaurant.id}`,
@@ -79,11 +79,12 @@ export const CreateSubscriptionService = async (
     await SubscriptionsRepository.update(newSubscription.id, {
       payment_link: session.url,
     });
+
+    return { payment_link: session.url };
   } catch (error: any) {
     console.error("Erro geral:", error.message || error);
   }
 
-  // return { message: messages.SUCCESSFUL_SUBSCRIPTION }
   return { payment_link: checkoutTest };
 };
 

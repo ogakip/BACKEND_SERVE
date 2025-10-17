@@ -39,6 +39,20 @@ export const ClearCookieService = (res: any) => {
   });
 };
 
+export const LogoutRestaurantService = async (restaurant_id: number) => {
+  const findRestaurant = await RestaurantRepository.findOneBy({
+    id: restaurant_id,
+  });
+
+  if (!findRestaurant) {
+    throw new AppError(messages.RESTAURANT_NOT_FOUND);
+  }
+
+  await SessionsRepository.delete({
+    owner: findRestaurant,
+  });
+};
+
 export const SetCookieService = (res: any, sessionToken: string) => {
   res.cookie("refreshToken", sessionToken, {
     httpOnly: true,
@@ -133,7 +147,6 @@ export const CreateRestaurantService = async (
       email,
       name: fullname,
     });
-    console.log(customer);
   } catch (error) {
     console.error("Erro ao criar customer na Stripe:", error);
     throw new AppError(
@@ -196,7 +209,7 @@ export const CreateRestaurantService = async (
 export const LoginRestaurantService = async (
   LoginRestaurantData: LOGIN_RESTAURANT_PROPS
 ) => {
-  const { email, username, password, rememberMe } = LoginRestaurantData;
+  const { email, username, password } = LoginRestaurantData;
 
   if (!email && !username) {
     throw new AppError("Informe e-mail ou nome de usuário para login.");
@@ -224,34 +237,17 @@ export const LoginRestaurantService = async (
     throw new AppError(messages.RESTAURANT_LOGIN_ERROR);
   }
 
-  const jwtSecret = process.env.CLIENT_JWT_SECRET;
-  const jwtSecretRefresh = process.env.CLIENT_JWT_SECRET_REFRESH;
+  const jwtSecret = process.env.CLIENT_JWT_SECRET_REFRESH;
 
   if (!jwtSecret) {
-    throw new Error("JWT Secret inválido ou não definido.");
-  } else if (!jwtSecretRefresh) {
     throw new Error("JWT Refresh Secret inválido ou não definido.");
-  }
-
-  const accessToken = jwt.sign(
-    { restaurant_id: findRestaurant.id },
-    jwtSecret!,
-    {
-      expiresIn: "1h",
-    }
-  );
-
-  if (!rememberMe) {
-    return {
-      accessToken,
-    };
   }
 
   const sessionToken = jwt.sign(
     { restaurant_id: findRestaurant.id },
-    jwtSecretRefresh!,
+    jwtSecret!,
     {
-      expiresIn: "7d",
+      expiresIn: "1d",
     }
   );
 
@@ -260,15 +256,12 @@ export const LoginRestaurantService = async (
   const newSession = SessionsRepository.create({
     sessionToken: hashedToken,
     owner: findRestaurant,
-    expires_at: new Date(Date.now() + 7 * 24 * 60 * 60 * 1000), // 7 dias
+    expires_at: new Date(Date.now() + 24 * 60 * 60 * 1000), // 1 dia
   });
 
   await SessionsRepository.save(newSession);
 
-  return {
-    accessToken,
-    sessionToken,
-  };
+  return { sessionToken };
 };
 
 export const EditRestaurantService = async (
