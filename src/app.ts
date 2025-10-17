@@ -2,7 +2,8 @@ import "reflect-metadata";
 import express from "express";
 import "express-async-errors";
 import cors from "cors";
-import 'dotenv/config';
+import cookieParser from "cookie-parser";
+import "dotenv/config";
 import { handleAppErrorMiddleware } from "./middlewares/handleAppError";
 import { RestaurantRoutes } from "./routers/restaurant";
 import { AdminRoutes } from "./routers/admin";
@@ -10,14 +11,13 @@ import { SubscriptionsRoutes } from "./routers/subscriptions";
 import { StripeRouter } from "./routers/stripe";
 
 export const app = express();
-app.use(
-    '/webhook',
-    express.raw({ type: 'application/json' }),
-    StripeRouter
-);
+app.use("/webhook", express.raw({ type: "application/json" }), StripeRouter);
 app.use(express.json());
-app.use(cors());
-app.use("/admin", AdminRoutes)
+app.use(cors(
+    { origin: process.env.FRONTEND_URL, credentials: true }
+));
+app.use(cookieParser());
+app.use("/admin", AdminRoutes);
 app.use("/restaurant", RestaurantRoutes);
-app.use("/subscriptions", SubscriptionsRoutes)
+app.use("/subscriptions", SubscriptionsRoutes);
 app.use(handleAppErrorMiddleware);

@@ -1,5 +1,5 @@
 import { Router } from "express";
-import { CreateRestaurant, EditRestaurant, LoginRestaurant } from "../controller/restaurant";
+import { CreateRestaurant, EditRestaurant, LoginRestaurant, LogoutRestaurant, ValidateSession } from "../controller/restaurant";
 import { verifyToken } from "../middlewares/auth";
 import { verifySubscriptionStatus } from "../middlewares/verifySubscriptionStatus";
 import { CreateTable, DeleteTable, EditTable, ListAllTables } from "../controller/tables";
@@ -21,7 +21,9 @@ export const RestaurantRoutes = Router();
 
 RestaurantRoutes.post('/register', schemaValidation(CreateRestaurantSchema), CreateRestaurant);
 RestaurantRoutes.post('/login', schemaValidation(LoginRestaurantSchema), LoginRestaurant);
-RestaurantRoutes.patch('/edit', verifyToken, schemaValidation(EditRestaurantSchema), EditRestaurant)
+RestaurantRoutes.get('/validate-session', verifyToken, ValidateSession);
+RestaurantRoutes.delete('/logout', verifyToken, LogoutRestaurant);
+RestaurantRoutes.patch('/edit', verifyToken, schemaValidation(EditRestaurantSchema), EditRestaurant);
 
 RestaurantRoutes.post('/tables', verifyToken, schemaValidation(CreateTableSchema), verifySubscriptionStatus, CreateTable)
 RestaurantRoutes.get('/tables', verifyToken, verifySubscriptionStatus, ListAllTables)

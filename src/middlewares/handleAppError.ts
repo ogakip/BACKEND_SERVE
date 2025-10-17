@@ -8,6 +8,13 @@ export const handleAppErrorMiddleware = (
   next: NextFunction
 ) => {
   if (error instanceof AppError) {
+    if (error.redirectUrl) {
+      res
+        .status(error.statusCode)
+        .json({ error: error.message, redirectUrl: error.redirectUrl });
+      return;
+    }
+
     res.status(error.statusCode).json({ error: error.message });
     return;
   }

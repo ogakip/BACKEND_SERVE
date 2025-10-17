@@ -10,6 +10,6 @@ import { verifyToken } from "../middlewares/auth";
 export const SubscriptionsRoutes = Router();
 
 SubscriptionsRoutes.get("/plans", ListAllPlans);
-SubscriptionsRoutes.get("/", GetUserSubscription);
+SubscriptionsRoutes.get("/", verifyToken, GetUserSubscription);
 SubscriptionsRoutes.post("/register/:id", verifyToken, CreateSubscription);
 SubscriptionsRoutes.patch("/cancel", verifyToken, CancelSubscription);

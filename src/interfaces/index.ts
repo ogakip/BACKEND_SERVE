@@ -21,6 +21,7 @@ export interface LOGIN_RESTAURANT_PROPS {
     email?: string
     username?: string
     password: string
+    rememberMe?: boolean
 }
 
 export interface EDIT_RESTAURANT_PROPS {

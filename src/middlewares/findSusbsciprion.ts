@@ -21,7 +21,7 @@ export const checkIfSubscriptionsExists = async (restaurant_id: number) => {
                 SubscriptionStatus.NOTPAID
             ])
         },
-        relations: ['plan'],
+        relations: ['plan', 'owner'],
         order: { created_at: 'DESC' },
     });
 
@@ -35,8 +35,12 @@ export const checkIfSubscriptionsExists = async (restaurant_id: number) => {
         relations: ['subscription', 'subscription.plan']
     });
 
-    if (!license || !license.is_active || !license.subscription) {
-        throw new AppError(messages.SUBSCRIPTION_NOT_FOUND);
+    if (!license) {
+        throw new AppError(messages.SUBSCRIPTION_NOT_FOUND, process.env.FRONTEND_PLANS_PAGE!);
+    }
+
+    if (!license.is_active) {
+        throw new AppError(messages.LICENSE_NOT_ACTIVE, process.env.FRONTEND_SUBSCRIPTION_STATUS_PAGE!);
     }
 
     return license.subscription;

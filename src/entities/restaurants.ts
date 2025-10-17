@@ -1,9 +1,10 @@
-import { Column, Entity, PrimaryGeneratedColumn } from "typeorm";
+import { Column, Entity, OneToMany, PrimaryGeneratedColumn } from "typeorm";
+import { Sessions } from "./sessions";
 
 export enum RestaurantType {
   NONE = "none",
   FILIAL = "filial",
-  MATRIZ = "matriz"
+  MATRIZ = "matriz",
 }
 
 @Entity()
@@ -51,5 +52,8 @@ export class Restaurant {
   zip_code: string;
 
   @Column({ type: "varchar" })
-  stripe_customer_id: string
+  stripe_customer_id: string;
+
+  @OneToMany(() => Sessions, (session) => session.owner)
+  sessions: Sessions[];
 }

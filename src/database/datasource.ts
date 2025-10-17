@@ -10,6 +10,7 @@ import { Restaurant_Subscriptions } from '../entities/subscriptions';
 import { Admins } from '../entities/admin';
 import { Restaurant_Order  } from '../entities/orders';
 import { Restaurant_Tables } from '../entities/tables';
+import { Sessions } from '../entities/sessions';
 
 export const AppDataSource = new DataSource({
   type: 'postgres',
@@ -20,7 +21,7 @@ export const AppDataSource = new DataSource({
   database: 'serve_db_test',
   synchronize: true, // ⛔ troque pra false em produção!
   logging: false,
-  entities: [Restaurant, Restaurant_Ingredients, Subscriptions_Licenses, Restaurant_Order , Plans, Restaurant_Recipe, Recipe_Ingredients, Restaurant_Subscriptions, Restaurant_Tables, Admins],
+  entities: [Restaurant, Sessions, Restaurant_Ingredients, Subscriptions_Licenses, Restaurant_Order , Plans, Restaurant_Recipe, Recipe_Ingredients, Restaurant_Subscriptions, Restaurant_Tables, Admins],
   migrations: [],
   subscribers: [],
 });
