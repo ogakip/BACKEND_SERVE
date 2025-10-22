@@ -31,7 +31,7 @@ RestaurantRoutes.patch('/tables/:table_id', verifyToken, schemaValidation(SetCli
 RestaurantRoutes.delete('/tables/:table_id', verifyToken, verifySubscriptionStatus, isTableOwner, DeleteTable)
 
 RestaurantRoutes.post('/ingredient', verifyToken, schemaValidation(CreateIngredientSchema), verifySubscriptionStatus, CreateIngredient)
-RestaurantRoutes.post('/ingredient/:ingredient_id', verifyToken, verifySubscriptionStatus, isIngredientOwner, DeleteIngredient)
+RestaurantRoutes.delete('/ingredient/:ingredient_id', verifyToken, verifySubscriptionStatus, isIngredientOwner, DeleteIngredient)
 RestaurantRoutes.patch('/ingredient/:ingredient_id', verifyToken, schemaValidation(EditIngredientSchema), verifySubscriptionStatus, isIngredientOwner, ChangeIngredient)
 RestaurantRoutes.get('/ingredients', verifyToken, verifySubscriptionStatus, ListIngredients)
 
