@@ -251,10 +251,8 @@ export const LoginRestaurantService = async (
     }
   );
 
-  const hashedToken = createHash("sha256").update(sessionToken).digest("hex");
-
   const newSession = SessionsRepository.create({
-    sessionToken: hashedToken,
+    sessionToken: sessionToken,
     owner: findRestaurant,
     expires_at: new Date(Date.now() + 24 * 60 * 60 * 1000), // 1 dia
   });

@@ -47,8 +47,12 @@ export const verifyToken = (
     throw new Error("JWT Secret inválido ou não definido.");
   }
 
+  console.log(jwtSecret)
+  console.log(refreshToken)
+
   jwt.verify(refreshToken, jwtSecret, (error: any, decoded: any) => {
     if (error) {
+      console.log(error)
       throw new AppError("Token de autorização inválido", 401);
     }
 
