@@ -1,7 +1,8 @@
-import { Column, CreateDateColumn, Entity, JoinColumn, ManyToOne, PrimaryGeneratedColumn } from "typeorm";
+import { Column, CreateDateColumn, Entity, JoinColumn, ManyToOne, PrimaryGeneratedColumn, OneToMany } from "typeorm";
 import { Restaurant_Recipe } from "./recipe";
 import { Restaurant } from "./restaurants";
 import { Restaurant_Tables } from "./tables";
+import { Order_Recipes } from "./orderRecipes";
 
 export enum OrderStatus {
     PENDING = "pending",
@@ -21,16 +22,8 @@ export class Restaurant_Order {
     @PrimaryGeneratedColumn()
     id: number;
 
-    @ManyToOne(() => Restaurant_Tables, { onDelete: 'CASCADE', nullable: true })
-    @JoinColumn({ name: 'table_id' })
-    table: Restaurant_Tables | null;
-
     @Column({ type: "enum", enum: OrderType })
     type: OrderType;
-
-    @ManyToOne(() => Restaurant_Recipe)
-    @JoinColumn({ name: 'recipe_id' })
-    recipe: Restaurant_Recipe;
 
     @Column({ type: "enum", enum: OrderStatus })
     status: OrderStatus;
@@ -41,7 +34,13 @@ export class Restaurant_Order {
     @Column({ type: "timestamp", nullable: true })
     finished_at: Date | null;
 
+    @Column()
+    total_value: number;
+
     @ManyToOne(() => Restaurant, { nullable: false })
     @JoinColumn({ name: 'owner_id' })
     owner: Restaurant
+    
+    @OneToMany(() => Order_Recipes, item => item.order)
+    items: Order_Recipes[];
 }

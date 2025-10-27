@@ -8,14 +8,14 @@ import { isTableOwner } from "../middlewares/isTableOwner";
 import { isIngredientOwner } from "../middlewares/isIngredientOwner";
 import { AddToRecipe, CreateRecipe, EditRecipe, ListAllRecipes, ListRecipeIngredients, RemoveFromRecipe } from "../controller/recipes";
 import { isRecipeOwner } from "../middlewares/isRecipeOwner";
-import { ChangeOrderStatus, CreateOrder, ListAllOrders } from "../controller/orders";
+import { AddRecipeToOrder, ChangeOrderStatus, CreateDeliveryDetails, CreateLocalDetails, CreateOrder, ListAllOrders, ListOrderDetails, ListOrderRecipes, RemoveRecipeFromOrder } from "../controller/orders";
 import { isOrderOwner } from "../middlewares/isOrderOwner";
 import { schemaValidation } from "../middlewares/yupValidator";
 import { CreateRestaurantSchema, EditRestaurantSchema, LoginRestaurantSchema } from "../validations/restaurant";
 import { CreateTableSchema, SetClientSchema } from "../validations/table";
 import { CreateIngredientSchema, EditIngredientSchema } from "../validations/ingredient";
 import { AddIngredientToRecipeSchema, CreateRecipeSchema, EditRecipeSchema } from "../validations/recipe";
-import { changeOrderStatusSchema, CreateOrderSchema } from "../validations/order";
+import { changeOrderStatusSchema, CreateOrderSchema, CreateOrderItemSchema, CreateDeliveryDetailsSchema, CreateLocalDetailsSchema } from "../validations/order";
 
 export const RestaurantRoutes = Router();
 
@@ -37,11 +37,18 @@ RestaurantRoutes.get('/ingredients', verifyToken, verifySubscriptionStatus, List
 
 RestaurantRoutes.post('/recipe', verifyToken, schemaValidation(CreateRecipeSchema), verifySubscriptionStatus, CreateRecipe)
 RestaurantRoutes.get('/recipe', verifyToken, verifySubscriptionStatus, ListAllRecipes)
-RestaurantRoutes.post('/recipe/:recipe_id/:ingredient_id', verifyToken, verifySubscriptionStatus, isRecipeOwner, isIngredientOwner, AddToRecipe)
-RestaurantRoutes.get('/recipe/ingredients/:recipe_id', verifyToken, schemaValidation(AddIngredientToRecipeSchema), verifySubscriptionStatus, isRecipeOwner, ListRecipeIngredients)
+RestaurantRoutes.post('/recipe/:recipe_id/:ingredient_id', verifyToken,schemaValidation(AddIngredientToRecipeSchema), verifySubscriptionStatus, isRecipeOwner, isIngredientOwner, AddToRecipe)
+RestaurantRoutes.get('/recipe/ingredients/:recipe_id', verifyToken, verifySubscriptionStatus, isRecipeOwner, ListRecipeIngredients)
 RestaurantRoutes.patch('/recipe/:recipe_id', verifyToken, schemaValidation(EditRecipeSchema), verifySubscriptionStatus, isRecipeOwner, EditRecipe)
 RestaurantRoutes.post('/recipe/:recipe_id/recipe_ingredients/:recipe_ingredient_id', verifyToken, verifySubscriptionStatus, isRecipeOwner, RemoveFromRecipe)
 
 RestaurantRoutes.get('/order', verifyToken, verifySubscriptionStatus, ListAllOrders)
 RestaurantRoutes.post('/order', verifyToken, schemaValidation(CreateOrderSchema), verifySubscriptionStatus, CreateOrder)
 RestaurantRoutes.patch('/order/:order_id', verifyToken, schemaValidation(changeOrderStatusSchema), verifySubscriptionStatus, isOrderOwner, ChangeOrderStatus)
+RestaurantRoutes.post('/order/delivery/:order_id', verifyToken, schemaValidation(CreateDeliveryDetailsSchema), verifySubscriptionStatus, CreateDeliveryDetails)
+RestaurantRoutes.post('/order/local/:order_id/:table_id', verifyToken, schemaValidation(CreateLocalDetailsSchema), verifySubscriptionStatus, CreateLocalDetails)
+RestaurantRoutes.get('/order/details/:order_id', verifyToken, verifySubscriptionStatus, isOrderOwner, ListOrderDetails);
+
+RestaurantRoutes.post('/order_recipe/:order_id/:recipe_id', verifyToken, schemaValidation(CreateOrderItemSchema), verifySubscriptionStatus, AddRecipeToOrder)
+RestaurantRoutes.delete('/order_recipe/:order_recipe_id', verifyToken, verifySubscriptionStatus, RemoveRecipeFromOrder)
+RestaurantRoutes.get('/order_recipes/:order_id', verifyToken, verifySubscriptionStatus, ListOrderRecipes);

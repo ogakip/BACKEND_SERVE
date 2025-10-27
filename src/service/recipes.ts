@@ -51,7 +51,6 @@ export const AddToRecipeService = async (quantity: number, recipe_id: number, in
 }
 
 export const ListRecipeIngredientsService = async (recipe_id: number, restaurant_id: number) => {
-    const findSubscription = await checkIfSubscriptionsExists(restaurant_id);
     const findRecipe = await RecipeRepository.findOneBy({ id: recipe_id })
 
     if (!findRecipe) {

@@ -38,7 +38,7 @@ export const verifyToken = (
   const refreshToken = req.cookies.refreshToken;
 
   if (!refreshToken) {
-    throw new AppError("Não autorizado", 401);
+    throw new AppError("Não autorizado");
   }
 
   const jwtSecret = process.env.CLIENT_JWT_SECRET_REFRESH;
@@ -47,13 +47,10 @@ export const verifyToken = (
     throw new Error("JWT Secret inválido ou não definido.");
   }
 
-  console.log(jwtSecret)
-  console.log(refreshToken)
-
   jwt.verify(refreshToken, jwtSecret, (error: any, decoded: any) => {
     if (error) {
       console.log(error)
-      throw new AppError("Token de autorização inválido", 401);
+      throw new AppError("Token de autorização inválido", `${process.env.FRONTEND_URL}${process.env.FRONTEND_LOGIN_PAGE}`, 401);
     }
 
     res.locals.restaurant_id = decoded.restaurant_id;
@@ -70,7 +67,7 @@ export const verifyAdminToken = (
   let accessToken = req.headers.authorization;
 
   if (!accessToken) {
-    throw new AppError("Não autorizado", 401);
+    throw new AppError("Não autorizado", `${process.env.FRONTEND_URL}${process.env.FRONTEND_LOGIN_PAGE}`, 401);
   }
 
   const jwtSecret = process.env.ADMIN_JWT_SECRET;
@@ -83,7 +80,7 @@ export const verifyAdminToken = (
 
   jwt.verify(splitToken[1], jwtSecret, (error: any, decoded: any) => {
     if (error) {
-      throw new AppError("Token de autorização inválido", 401);
+      throw new AppError("Token de autorização inválido", `${process.env.FRONTEND_URL}${process.env.FRONTEND_LOGIN_PAGE}`, 401);
     }
 
     res.locals.admin_id = decoded.admin_id;

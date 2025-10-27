@@ -38,4 +38,8 @@ export const messages = {
     INVALID_SESSION: "Sessão inválida ou expirada.",
     SESSION_TOKEN_NOT_FOUND: "Token de sessão não encontrado.",
     UNAUTHORIZED_SESSION: "Sessão não autorizada.",
+    ORDER_RECIPE_NOT_FOUND: "A receita não está vinculada a este pedido.",
+    DELIVERY_DETAILS_ALREADY_EXISTS: "Detalhes de entrega já cadastrados para este pedido.",
+    LOCAL_DETAILS_ALREADY_EXISTS: "Detalhes do pedido local já cadastrados para este pedido.",
+    ORDER_DETAILS_NOT_FOUND: "Detalhes do pedido não encontrados.",
 }
